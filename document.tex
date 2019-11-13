@@ -1,0 +1,3384 @@
+\documentclass[a4paper,11pt]{extarticle}
+
+% PARAMETER TO GREY OUT TEXT
+\usepackage{etoolbox}
+\newtoggle{greytext}
+%\toggletrue{greytext}
+\togglefalse{greytext}
+
+% TODO: ultra shortening option for document
+% TODO: greying-out option for document
+
+% PAPER LAYOUT
+\usepackage[margin=0.5cm]{geometry}
+
+% TODO: page numbering
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\thepage}
+
+% COMMENTS (invisible)
+\usepackage{comment}
+
+% COLORS
+\usepackage{color}
+\usepackage{xcolor}
+
+\iftoggle{greytext}{
+\newcommand{\tcr}[1]{\textcolor{lighttext}{#1}}
+\newcommand{\tcb}[1]{\textcolor{lighttext}{#1}}
+\newcommand{\tcg}[1]{\textcolor{lighttext}{#1}}
+\newcommand{\tcp}[1]{\textcolor{lighttext}{#1}}
+}{
+\newcommand{\tcr}[1]{\textcolor{red}{#1}}
+\newcommand{\tcb}[1]{\textcolor{blue}{#1}}
+\newcommand{\tcg}[1]{\textcolor{green}{#1}}
+\newcommand{\tcp}[1]{\textcolor{pink}{#1}}
+}
+
+% MULTICOLUMN LAYOUT
+\usepackage{multicol}
+\setlength\columnsep{20pt}
+\setlength{\columnseprule}{0.1pt}
+\iftoggle{greytext}{
+\renewcommand{\columnseprulecolor}{\color{lighttext}}
+}{
+}
+
+% PARAGRAPH LAYOUT
+\setlength\parindent{0pt}	% indentation
+\setlength\parskip{2pt}		% space between paragraphs
+
+% LANGUAGE SETTINGS
+%\usepackage[ngerman]{babel} % Silbentrennung (und Deutsche Titel)
+\usepackage[utf8]{inputenc} % Umlaute
+
+% FONTS
+%\usepackage{mathpazo}
+%\usepackage{helvet}
+%\usepackage{fouriernc}
+%\usepackage[varg]{txfonts}
+%\usepackage{mathptmx}
+%\usepackage[charter]{mathdesign}
+%\usepackage[garamond]{mathdesign}
+%\usepackage[utopia]{mathdesign}
+%\usepackage{fourier}
+% font kerning (load after specific font!)
+\usepackage{microtype}
+
+% CUSTOM FONT SIZES
+\usepackage{relsize}
+
+% FIGURE SETTINGS
+\usepackage{pict2e} % load this before picture
+\usepackage{picture}
+\usepackage{graphicx}
+\usepackage{adjustbox}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% TIKZ GRAPHICS
+\usepackage{tikz}
+\usetikzlibrary{calc,matrix,arrows,automata,fit}
+
+% PLOTS
+\usepackage{pgfplots}
+
+% FLOAT SETTINGS
+\usepackage{float}
+
+% REFERENCING
+\usepackage{hyperref}
+
+% TABLES
+\usepackage{booktabs} % nicer tables
+\usepackage{array} % custom column types
+\usepackage{multirow} % span cells over multiple rows
+\newcommand{\tabitem}{~~\llap{{\boldmath $\cdot$}}~} % items in tables
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash$}m{#1}<{$}}
+
+\newcolumntype{H}[1]{%
+ >{\vbox to 5ex\bgroup\vfill\centering}%
+ p{#1}%
+ <{\egroup}}  
+
+\newlength{\mycolwd}  % array column width
+% "width" of $e^{-\frac{i}{\hbar}|A|t$; largest element in array
+
+% LISTS
+\usepackage{enumitem}
+\setlist{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt,leftmargin=10pt}
+\renewcommand\labelitemi{{\boldmath$\cdot$}}
+\renewcommand\labelitemii{{\boldmath$\cdot$}}
+\renewcommand\labelitemiii{{\boldmath$\cdot$}}
+
+% TIGHT CENTER ENVIRONMENT
+\newenvironment{tightcenter}{%
+  \begin{center}
+  \vspace{-12pt}
+}{
+  \vspace{-12pt}
+  \end{center}
+}
+
+% MATH (packages and settings)
+\usepackage{blkarray}  		% matrix annotations
+\usepackage[intlimits]{mathtools}
+\usepackage{amssymb}
+\usepackage{wasysym}
+\usepackage{dsfont}
+\usepackage{resizegather} 	% resizing equations
+\usepackage{oubraces}    	% special overlapping over/underbraces
+\usepackage{scalerel}		% scaling of characters
+\usepackage{cancel}			% crossing out of terms
+\allowdisplaybreaks 		% allow page break in align* environment
+
+% PROOF TREES
+\usepackage{proof}
+\inferLineSkip=4pt % adjust line skip between proofs
+
+% PROOFS
+\newcommand{\qed}{\hfill$\square$}
+\newcommand{\contradiction}{\hfill$\lightning$}
+
+% MATH HIGHLIGHTING
+\newcommand{\mhl}[2]{\colorbox{#1}{$\displaystyle#2$}}
+\newcommand{\mhlr}[1]{\mathhl{red}{#1}}
+\newcommand{\mhlg}[1]{\mathhl{green}{#1}}
+\newcommand{\mhlb}[1]{\mathhl{blue}{#1}}
+\newcommand{\mhly}[1]{\mathhl{yellow}{#1}}
+
+% CODE IN MATH
+\newcommand{\mcode}[1]{\texttt{#1}}
+
+% COLOR IN MATH (without the bad behaviour of textcolor)
+\makeatletter
+\def\mc#1#{\@mc{#1}}
+\def\@mc#1#2#3{%
+  \protect\leavevmode
+  \begingroup
+    \color#1{#2}#3%
+  \endgroup
+}
+\makeatother
+
+\iftoggle{greytext}{
+\definecolor{brilliantrose}{rgb}{1.0, 0.33, 0.64}
+\newcommand{\mcr}[1]{\mc{lighttext}{#1}}
+\newcommand{\mcg}[1]{\mc{lighttext}{#1}}
+\newcommand{\mcb}[1]{\mc{lighttext}{#1}}
+\newcommand{\mcy}[1]{\mc{lighttext}{#1}}
+\newcommand{\mcp}[1]{\mc{lighttext}{#1}}
+\newcommand{\mcw}[1]{\mc{white}{#1}}
+}{
+\definecolor{brilliantrose}{rgb}{1.0, 0.33, 0.64}
+\newcommand{\mcr}[1]{\mc{red}{#1}}
+\newcommand{\mcg}[1]{\mc{green}{#1}}
+\newcommand{\mcb}[1]{\mc{blue}{#1}}
+\newcommand{\mcy}[1]{\mc{yellow}{#1}}
+\newcommand{\mcp}[1]{\mc{brilliantrose}{#1}}
+\newcommand{\mcw}[1]{\mc{white}{#1}}
+}
+
+% ASYMPTOTIC NOTATIONS
+\newcommand{\BigO}{\mathcal{O}}
+
+% NUMBER SYSTEMS
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\bbH}{\mathbb{H}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\M}{\mathbb{M}}
+\newcommand{\C}{\mathbb{C}}
+
+% CALLICGRAPHIC SHORTCUTS
+\newcommand{\cA}{\mathcal{A}}
+\newcommand{\cB}{\mathcal{B}}
+\newcommand{\cC}{\mathcal{C}}
+\newcommand{\cD}{\mathcal{D}}
+\newcommand{\cE}{\mathcal{E}}
+\newcommand{\cF}{\mathcal{F}}
+\newcommand{\cG}{\mathcal{G}}
+\newcommand{\cH}{\mathcal{H}}
+\newcommand{\cI}{\mathcal{I}}
+\newcommand{\cJ}{\mathcal{J}}
+\newcommand{\cK}{\mathcal{K}}
+\newcommand{\cL}{\mathcal{L}}
+\newcommand{\cM}{\mathcal{M}}
+\newcommand{\cN}{\mathcal{N}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\cP}{\mathcal{P}}
+\newcommand{\cQ}{\mathcal{Q}}
+\newcommand{\cR}{\mathcal{R}}
+\newcommand{\cS}{\mathcal{S}}
+\newcommand{\cT}{\mathcal{T}}
+\newcommand{\cU}{\mathcal{U}}
+\newcommand{\cV}{\mathcal{V}}
+\newcommand{\cW}{\mathcal{W}}
+\newcommand{\cX}{\mathcal{X}}
+\newcommand{\cY}{\mathcal{Y}}
+\newcommand{\cZ}{\mathcal{Z}}
+
+% BRACES
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newcommand{\dset}[2]{\left\{ #1 \ \middle| \ #2 \right\}}
+\newcommand{\alg}[1]{\left\langle #1 \right\rangle}
+\newcommand{\card}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\length}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\newcommand{\scprod}[1]{\left\langle #1 \right\rangle}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\linsys}[2]{\left[\ #1 \ \middle| \ #2 \ \right]}
+
+% BRACES SMALL (no adjusting)
+\newcommand{\sset}[1]{\{ #1 \}}
+\newcommand{\sdset}[2]{\{ #1 \ | \ #2 \}}
+\newcommand{\salg}[1]{\langle #1 \rangle}
+\newcommand{\scard}[1]{\lvert #1 \rvert}
+\newcommand{\slength}[1]{\lvert #1 \rvert}
+\newcommand{\sabs}[1]{\lvert #1 \rvert}
+\newcommand{\snorm}[1]{\lVert #1 \rVert}
+\newcommand{\sscprod}[1]{\langle #1 \rangle}
+\newcommand{\sceil}[1]{\lceil #1 \rceil}
+\newcommand{\sfloor}[1]{\lfloor #1 \rfloor}
+\newcommand{\slinsys}[2]{[\ #1 \ | \ #2 \ ]}
+
+% DISJOINT UNION SYMBOL
+\makeatletter
+\def\moverlay{\mathpalette\mov@rlay}
+\def\mov@rlay#1#2{\leavevmode\vtop{%
+   \baselineskip\z@skip \lineskiplimit-\maxdimen
+   \ialign{\hfil$\m@th#1##$\hfil\cr#2\crcr}}}
+\newcommand{\charfusion}[3][\mathord]{
+    #1{\ifx#1\mathop\vphantom{#2}\fi
+        \mathpalette\mov@rlay{#2\cr#3}
+      }
+    \ifx#1\mathop\expandafter\displaylimits\fi}
+\makeatother
+\newcommand{\bigcupdot}{\charfusion[\mathop]{\bigcup}{\cdot}}
+\newcommand{\cupdot}{\mathbin{\mathaccent\cdot\cup}}
+
+% CUSTOM STATISTICS
+\newcommand{\Prob}[2][]{P_{#1}\left( #2 \right)}
+\newcommand{\cProb}[2]{P\left( #1 \,\middle|\, #2 \right)}
+\newcommand{\hProb}[2][]{\hat{P}_{#1}\left( #2 \right)}
+\newcommand{\chProb}[2]{\hat{P}\left( #1 \,\middle|\, #2 \right)}
+\newcommand{\Var}[2][]{\operatorname{Var}_{#1}\left[ #2 \right]}
+\newcommand{\sd}[1]{\operatorname{sd}\left( #1 \right)}
+\newcommand{\Exp}[2][]{{\mathbb{E}_{#1}}\left[ #2 \right]}
+\newcommand{\cExp}[3][]{{\mathbb{E}}_{#1}\left[ #2 \,\middle|\, #3 \right]}
+\newcommand{\hExp}[2][]{{\mathbb{\hat{E}}_{#1}}\left[ #2 \right]}
+\newcommand{\chExp}[3][]{{\mathbb{\hat{E}}}_{#1}\left[ #2\,\middle|\, #3\right]}
+\newcommand{\Corr}[1]{\operatorname{Corr}\left[ #1 \right]}
+\newcommand{\Cov}[1]{\operatorname{Cov}\left(#1 \right)}
+\newcommand{\MSE}[2][]{\operatorname{MSE}_{#1}\left[ #2 \right]}
+\newcommand{\riid}{\stackrel{\text{\tiny i.i.d.}}{\sim}}
+\newcommand{\approxsim}{\stackrel{\text{approx.}}{\sim}}
+\newcommand{\ind}[1]{\mathds{1}_{\set{#1}}}
+
+% RANDOM VARIABLES
+\newcommand{\rA}{A}
+\newcommand{\rB}{B}
+\newcommand{\rC}{C}
+\newcommand{\rD}{D}
+\newcommand{\rE}{E}
+\newcommand{\rF}{F}
+\newcommand{\rG}{G}
+\newcommand{\rH}{H}
+\newcommand{\rI}{I}
+\newcommand{\rJ}{J}
+\newcommand{\rK}{K}
+\newcommand{\rL}{L}
+\newcommand{\rM}{M}
+\newcommand{\rN}{N}
+\newcommand{\rO}{O}
+\newcommand{\rP}{P}
+\newcommand{\rQ}{Q}
+\newcommand{\rR}{R}
+\newcommand{\rS}{S}
+\newcommand{\rT}{T}
+\newcommand{\rU}{U}
+\newcommand{\rV}{V}
+\newcommand{\rW}{W}
+\newcommand{\rX}{X}
+\newcommand{\rY}{Y}
+\newcommand{\rZ}{Z}
+
+% RANDOM VECTORS
+% declares a custom italic bold alphabet for random vectors
+\DeclareMathAlphabet{\mathbfit}{OML}{cmm}{b}{it}
+\newcommand{\rvA}{\mathbfit{A}}
+\newcommand{\rvB}{\mathbfit{B}}
+\newcommand{\rvC}{\mathbfit{C}}
+\newcommand{\rvD}{\mathbfit{D}}
+\newcommand{\rvE}{\mathbfit{E}}
+\newcommand{\rvF}{\mathbfit{F}}
+\newcommand{\rvG}{\mathbfit{G}}
+\newcommand{\rvH}{\mathbfit{H}}
+\newcommand{\rvI}{\mathbfit{I}}
+\newcommand{\rvJ}{\mathbfit{J}}
+\newcommand{\rvK}{\mathbfit{K}}
+\newcommand{\rvL}{\mathbfit{L}}
+\newcommand{\rvM}{\mathbfit{M}}
+\newcommand{\rvN}{\mathbfit{N}}
+\newcommand{\rvO}{\mathbfit{O}}
+\newcommand{\rvP}{\mathbfit{P}}
+\newcommand{\rvQ}{\mathbfit{Q}}
+\newcommand{\rvR}{\mathbfit{R}}
+\newcommand{\rvS}{\mathbfit{S}}
+\newcommand{\rvT}{\mathbfit{T}}
+\newcommand{\rvU}{\mathbfit{U}}
+\newcommand{\rvV}{\mathbfit{V}}
+\newcommand{\rvW}{\mathbfit{W}}
+\newcommand{\rvX}{\mathbfit{X}}
+\newcommand{\rvY}{\mathbfit{Y}}
+\newcommand{\rvZ}{\mathbfit{Z}}
+
+% MACHINE LEARNING
+\newcommand{\Risk}[1]{R\left(#1\right)}
+\newcommand{\empRisk}[1]{\widehat{R}\left(#1\right)}
+
+% ACCENTS
+% TODO: fix this, make spacing nice
+\newcommand*{\Hm}{\mathsf{H}}
+\newcommand*{\T}{\mathsf{T}}
+%\newcommand*{\T}{\mkern-1mu{}_{}^{\scriptscriptstyle\top}\mkern-4mu}
+\newcommand*{\Rev}{\mathsf{R}}
+\newcommand{\conj}[1]{\overline{ #1 }}
+
+% CUSTOM ALPHABETS
+\renewcommand{\S}{\Sigma}
+\newcommand{\Ss}{\Sigma^*}
+\newcommand{\Sp}{\Sigma^+}
+\newcommand{\Sbool}{\Sigma_{\text{bool}}}
+\newcommand{\Ssbool}{(\Sigma_{\text{bool}})^*}
+\newcommand{\Slogic}{\Sigma_{\text{logic}}}
+\newcommand{\Sslogic}{(\Sigma_{\text{logic}})^*}
+\newcommand{\Slat}{\Sigma_{\text{lat}}}
+\newcommand{\Sslat}{(\Sigma_{\text{lat}})^*}
+\newcommand{\Stastatur}{\Sigma_{\text{Tastatur}}}
+\newcommand{\Sstastatur}{(\Sigma_{\text{Tastatur}})^*}
+\newcommand{\Sm}{\Sigma_{m}}
+\newcommand{\Ssm}{\Sigma_{m}^*}
+\newcommand{\ZO}{\{0,1\}}
+\newcommand{\ZOs}{\{0,1\}^*}
+\newcommand{\hdelta}{\hat\delta}
+
+% OPERATORS
+% TODO: Should I design these as braces?
+\DeclareMathOperator{\id}{\text{id}}
+\DeclareMathOperator{\Kon}{\text{Kon}}
+\DeclareMathOperator{\cost}{\text{cost}}
+\DeclareMathOperator{\goal}{\text{goal}}
+\DeclareMathOperator{\Opt}{\text{Opt}}
+\DeclareMathOperator{\Bin}{\text{Bin}}
+\DeclareMathOperator{\Nummer}{\text{Nummer}}
+\DeclareMathOperator{\Prim}{\text{Prim}}
+\DeclareMathOperator{\Kl}{\text{Kl}}
+\DeclareMathOperator{\lcm}{lcm}
+\DeclareMathOperator{\glb}{glb}
+\DeclareMathOperator{\lub}{lub}
+\DeclareMathOperator{\im}{im}
+\DeclareMathOperator{\ord}{ord}
+\DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\spn}{span}
+\DeclareMathOperator{\Cost}{Cost}
+\DeclareMathOperator{\order}{order}
+\DeclareMathOperator{\dist}{dist}
+\DeclareMathOperator{\cond}{cond}
+\DeclareMathOperator{\nnz}{nnz}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Tr}{Tr}
+\DeclareMathOperator{\Count}{Count}
+\DeclareMathOperator{\Spur}{Spur}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\triu}{triu}
+\DeclareMathOperator{\cumsum}{cumsum}
+\DeclareMathOperator{\vectorize}{vectorize}
+\DeclareMathOperator{\matrixfy}{matrixfy}
+\DeclareMathOperator{\circul}{circul}
+\DeclareMathOperator{\dft}{dft}
+\DeclareMathOperator{\invdft}{invdft}
+\DeclareMathOperator{\ones}{ones}
+\DeclareMathOperator{\arcsinh}{arcsinh}
+\DeclareMathOperator{\arccosh}{arccosh}
+\DeclareMathOperator{\arctanh}{arctanh}
+\renewcommand\div{\operatorname{div}}
+\DeclareMathOperator{\rot}{rot}
+\DeclareMathOperator{\cis}{cis}
+\DeclareMathOperator{\grad}{grad}
+\DeclareMathOperator{\Hess}{Hess}
+\newcommand{\laplace}{\Delta}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+% OPERATORS (OVERRIDDEN)
+\renewcommand\Re{\operatorname{Re}}
+\renewcommand\Im{\operatorname{Im}}
+
+% RELATIONS
+\newcommand{\mbeq}{\stackrel{!}{=}}
+\newcommand{\relid}{\mathrel{\id}}
+\newcommand{\relrho}{\mathrel{\rho}}
+\newcommand{\relsigma}{\mathrel{\sigma}}
+\newcommand{\reltheta}{\mathrel{\theta}}
+\newcommand{\relsim}{\mathrel{\sim}}
+\newcommand{\relf}{\mathrel{f}}
+
+% RELATIONS (INVERSES)
+\newcommand{\invrelid}{\mathrel{\widehat{\id}}}
+\newcommand{\invrelrho}{\mathrel{\widehat{\rho}}}
+\newcommand{\invrelsigma}{\mathrel{\widehat{\sigma}}}
+\newcommand{\invreltheta}{\mathrel{\widehat{\theta}}}
+\newcommand{\invrelsim}{\mathrel{\widehat{\sim}}}
+\newcommand{\invrelf}{\mathrel{\widehat{f}}}
+
+% CUSTOM RELATIONS
+\DeclareRobustCommand{\step}[2][]{\mathrel{\drawstep{#1}{#2}}}
+\newcommand{\drawstep}[2]{%
+  \vcenter{\hbox{%
+    \setlength{\unitlength}{1em}%
+    \begin{picture}(1,1)
+    \roundcap
+    \put(0,0){\line(0,1){1}}
+    \put(0,0.5){\line(1,0){0.95}}
+    \put(0.5,0){\makebox[0pt]{\text{\smaller$\scriptscriptstyle#2$}}}
+    \put(0.5,0.6){\makebox[0pt]{\text{\smaller$#1$}}}
+    \end{picture}%
+  }}%
+}
+
+% LINEAR TEMPORAL LOGIC (LTL)
+\newcommand{\until}{\texttt{\,\hstretch{0.7}{\boldsymbol{\cup}}\,}}
+\newcommand{\next}{\Circle}
+\newcommand{\eventually}{\Diamond}
+\newcommand{\always}{\square}
+
+% GLOBAL MATRICES AND VECTOR SETTINGS
+\newcommand{\boldm}[1] {\mathversion{bold}#1\mathversion{normal}}
+\newcommand{\mat}[1]{\mathbf{#1}}
+\renewcommand{\vec}[1]{\mathbf{#1}}
+
+% VECTORS (LATIN)
+\newcommand{\va}{\vec{a}}
+\newcommand{\vb}{\vec{b}}
+\newcommand{\vc}{\vec{c}}
+\newcommand{\vd}{\vec{d}}
+\newcommand{\ve}{\vec{e}}
+\newcommand{\vf}{\vec{f}}
+\newcommand{\vg}{\vec{g}}
+\newcommand{\vh}{\vec{h}}
+\newcommand{\vi}{\vec{i}}
+\newcommand{\vj}{\vec{j}}
+\newcommand{\vk}{\vec{k}}
+\newcommand{\vl}{\vec{l}}
+\newcommand{\vm}{\vec{m}}
+\newcommand{\vn}{\vec{n}}
+\newcommand{\vo}{\vec{o}}
+\newcommand{\vp}{\vec{p}}
+\newcommand{\vq}{\vec{q}}
+\newcommand{\vr}{\vec{r}}
+\newcommand{\vs}{\vec{s}}
+\newcommand{\vt}{\vec{t}}
+\newcommand{\vu}{\vec{u}}
+\newcommand{\vv}{\vec{v}}
+\newcommand{\vw}{\vec{w}}
+\newcommand{\vx}{\vec{x}}
+\newcommand{\vy}{\vec{y}}
+\newcommand{\vz}{\vec{z}}
+
+% VECTORS (LATIN) WITH TILDE ACCENT
+\newcommand{\vta}{\widetilde{\vec{a}}}
+\newcommand{\vtb}{\widetilde{\vec{b}}}
+\newcommand{\vtc}{\widetilde{\vec{c}}}
+\newcommand{\vtd}{\widetilde{\vec{d}}}
+\newcommand{\vte}{\widetilde{\vec{e}}}
+\newcommand{\vtf}{\widetilde{\vec{f}}}
+\newcommand{\vtg}{\widetilde{\vec{g}}}
+\newcommand{\vth}{\widetilde{\vec{h}}}
+\newcommand{\vti}{\widetilde{\vec{i}}}
+\newcommand{\vtj}{\widetilde{\vec{j}}}
+\newcommand{\vtk}{\widetilde{\vec{k}}}
+\newcommand{\vtl}{\widetilde{\vec{l}}}
+\newcommand{\vtm}{\widetilde{\vec{m}}}
+\newcommand{\vtn}{\widetilde{\vec{n}}}
+\newcommand{\vto}{\widetilde{\vec{o}}}
+\newcommand{\vtp}{\widetilde{\vec{p}}}
+\newcommand{\vtq}{\widetilde{\vec{q}}}
+\newcommand{\vtr}{\widetilde{\vec{r}}}
+\newcommand{\vts}{\widetilde{\vec{s}}}
+\newcommand{\vtt}{\widetilde{\vec{t}}}
+\newcommand{\vtu}{\widetilde{\vec{u}}}
+\newcommand{\vtv}{\widetilde{\vec{v}}}
+\newcommand{\vtw}{\widetilde{\vec{w}}}
+\newcommand{\vtx}{\widetilde{\vec{x}}}
+\newcommand{\vty}{\widetilde{\vec{y}}}
+\newcommand{\vtz}{\widetilde{\vec{z}}}
+
+% VECTORS (LATIN) WITH HAT ACCENT
+\newcommand{\vha}{\widehat{\vec{a}}}
+\newcommand{\vhb}{\widehat{\vec{b}}}
+\newcommand{\vhc}{\widehat{\vec{c}}}
+\newcommand{\vhd}{\widehat{\vec{d}}}
+\newcommand{\vhe}{\widehat{\vec{e}}}
+\newcommand{\vhf}{\widehat{\vec{f}}}
+\newcommand{\vhg}{\widehat{\vec{g}}}
+\newcommand{\vhh}{\widehat{\vec{h}}}
+\newcommand{\vhi}{\widehat{\vec{i}}}
+\newcommand{\vhj}{\widehat{\vec{j}}}
+\newcommand{\vhk}{\widehat{\vec{k}}}
+\newcommand{\vhl}{\widehat{\vec{l}}}
+\newcommand{\vhm}{\widehat{\vec{m}}}
+\newcommand{\vhn}{\widehat{\vec{n}}}
+\newcommand{\vho}{\widehat{\vec{o}}}
+\newcommand{\vhp}{\widehat{\vec{p}}}
+\newcommand{\vhq}{\widehat{\vec{q}}}
+\newcommand{\vhr}{\widehat{\vec{r}}}
+\newcommand{\vhs}{\widehat{\vec{s}}}
+\newcommand{\vht}{\widehat{\vec{t}}}
+\newcommand{\vhu}{\widehat{\vec{u}}}
+\newcommand{\vhv}{\widehat{\vec{v}}}
+\newcommand{\vhw}{\widehat{\vec{w}}}
+\newcommand{\vhx}{\widehat{\vec{x}}}
+\newcommand{\vhy}{\widehat{\vec{y}}}
+\newcommand{\vhz}{\widehat{\vec{z}}}
+
+% VECTORS (GREEK)
+\newcommand{\valpha}{\boldsymbol{\alpha}}
+\newcommand{\vbeta}{\boldsymbol{\beta}}
+\newcommand{\vgamma}{\boldsymbol{\gamma}}
+\newcommand{\vdelta}{\boldsymbol{\delta}}
+\newcommand{\vepsilon}{\boldsymbol{\epsilon}}
+\newcommand{\vvarepsilon}{\boldsymbol{\varepsilon}}
+\newcommand{\vzeta}{\boldsymbol{\zeta}}
+\newcommand{\veta}{\boldsymbol{\eta}}
+\newcommand{\vtheta}{\boldsymbol{\theta}}
+\newcommand{\viota}{\boldsymbol{\iota}}
+\newcommand{\vkappa}{\boldsymbol{\kappa}}
+\newcommand{\vlambda}{\boldsymbol{\lambda}}
+\newcommand{\vmu}{\boldsymbol{\mu}}
+\newcommand{\vnu}{\boldsymbol{\nu}}
+\newcommand{\vxi}{\boldsymbol{\xi}}
+% omikron is just latin 'o'
+\newcommand{\vpi}{\boldsymbol{\pi}}
+\newcommand{\vrho}{\boldsymbol{\rho}}
+\newcommand{\vsigma}{\boldsymbol{\sigma}}
+\newcommand{\vtau}{\boldsymbol{\tau}}
+\newcommand{\vupsilon}{\boldsymbol{\upsilon}}
+\newcommand{\vphi}{\boldsymbol{\phi}}
+\newcommand{\vvarphi}{\boldsymbol{\varphi}}
+\newcommand{\vchi}{\boldsymbol{\chi}}
+\newcommand{\vpsi}{\boldsymbol{\psi}}
+\newcommand{\vomega}{\boldsymbol{\omega}}
+
+% VECTORS (GREEK) WITH TILDE ACCENT
+\newcommand{\vtalpha}{\widetilde{\valpha}}
+\newcommand{\vtbeta}{\widetilde{\vbeta}}
+\newcommand{\vtgamma}{\widetilde{\vgamma}}
+\newcommand{\vtdelta}{\widetilde{\vdelta}}
+\newcommand{\vtepsilon}{\widetilde{\vepsilon}}
+\newcommand{\vtvarepsilon}{\widetilde{\vvarepsilon}}
+\newcommand{\vtzeta}{\widetilde{\vzeta}}
+\newcommand{\vteta}{\widetilde{\veta}}
+\newcommand{\vttheta}{\widetilde{\vtheta}}
+\newcommand{\vtiota}{\widetilde{\viota}}
+\newcommand{\vtkappa}{\widetilde{\vkappa}}
+\newcommand{\vtlambda}{\widetilde{\vlambda}}
+\newcommand{\vtmu}{\widetilde{\vmu}}
+\newcommand{\vtnu}{\widetilde{\vnu}}
+\newcommand{\vtxi}{\widetilde{\vxi}}
+% omikron is just latin 'o'
+\newcommand{\vtpi}{\widetilde{\vpi}}
+\newcommand{\vtrho}{\widetilde{\vrho}}
+\newcommand{\vtsigma}{\widetilde{\vsigma}}
+\newcommand{\vttau}{\widetilde{\vtau}}
+\newcommand{\vtupsilon}{\widetilde{\vupsilon}}
+\newcommand{\vtphi}{\widetilde{\vphi}}
+\newcommand{\vtvarphi}{\widetilde{\vvarphi}}
+\newcommand{\vtchi}{\widetilde{\vchi}}
+\newcommand{\vtpsi}{\widetilde{\vpsi}}
+\newcommand{\vtomega}{\widetilde{\vomega}}
+
+% VECTORS (GREEK) WITH HAT ACCENT
+\newcommand{\vhalpha}{\widehat{\valpha}}
+\newcommand{\vhbeta}{\widehat{\vbeta}}
+\newcommand{\vhgamma}{\widehat{\vgamma}}
+\newcommand{\vhdelta}{\widehat{\vdelta}}
+\newcommand{\vhepsilon}{\widehat{\vepsilon}}
+\newcommand{\vhvarepsilon}{\widehat{\vvarepsilon}}
+\newcommand{\vhzeta}{\widehat{\vzeta}}
+\newcommand{\vheta}{\widehat{\veta}}
+\newcommand{\vhtheta}{\widehat{\vtheta}}
+\newcommand{\vhiota}{\widehat{\viota}}
+\newcommand{\vhkappa}{\widehat{\vkappa}}
+\newcommand{\vhlambda}{\widehat{\vlambda}}
+\newcommand{\vhmu}{\widehat{\vmu}}
+\newcommand{\vhnu}{\widehat{\vnu}}
+\newcommand{\vhxi}{\widehat{\vxi}}
+% omikron is just latin 'o'
+\newcommand{\vhpi}{\widehat{\vpi}}
+\newcommand{\vhrho}{\widehat{\vrho}}
+\newcommand{\vhsigma}{\widehat{\vsigma}}
+\newcommand{\vhtau}{\widehat{\vthau}}
+\newcommand{\vhupsilon}{\widehat{\vupsilon}}
+\newcommand{\vhphi}{\widehat{\vphi}}
+\newcommand{\vhvarphi}{\widehat{\vvarphi}}
+\newcommand{\vhchi}{\widehat{\vchi}}
+\newcommand{\vhpsi}{\widehat{\vpsi}}
+\newcommand{\vhomega}{\widehat{\vomega}}
+
+% MATRICES (LATIN)
+\newcommand{\MA}{\mat{A}}
+\newcommand{\MB}{\mat{B}}
+\newcommand{\MC}{\mat{C}}
+\newcommand{\MD}{\mat{D}}
+\newcommand{\ME}{\mat{E}}
+\newcommand{\MF}{\mat{F}}
+\newcommand{\MG}{\mat{G}}
+\newcommand{\MH}{\mat{H}}
+\newcommand{\MI}{\mat{I}}
+\newcommand{\MJ}{\mat{J}}
+\newcommand{\MK}{\mat{K}}
+\newcommand{\ML}{\mat{L}}
+\newcommand{\MM}{\mat{M}}
+\newcommand{\MN}{\mat{N}}
+\newcommand{\MO}{\mat{0}}
+\newcommand{\MP}{\mat{P}}
+\newcommand{\MQ}{\mat{Q}}
+\newcommand{\MR}{\mat{R}}
+\newcommand{\MS}{\mat{S}}
+\newcommand{\MT}{\mat{T}}
+\newcommand{\MU}{\mat{U}}
+\newcommand{\MV}{\mat{V}}
+\newcommand{\MW}{\mat{W}}
+\newcommand{\MX}{\mat{X}}
+\newcommand{\MY}{\mat{Y}}
+\newcommand{\MZ}{\mat{Z}}
+
+% MATRICES (LATIN) TILDE
+\newcommand{\MtA}{\widetilde{\mat{A}}}
+\newcommand{\MtB}{\widetilde{\mat{B}}}
+\newcommand{\MtC}{\widetilde{\mat{C}}}
+\newcommand{\MtD}{\widetilde{\mat{D}}}
+\newcommand{\MtE}{\widetilde{\mat{E}}}
+\newcommand{\MtF}{\widetilde{\mat{F}}}
+\newcommand{\MtG}{\widetilde{\mat{G}}}
+\newcommand{\MtH}{\widetilde{\mat{H}}}
+\newcommand{\MtI}{\widetilde{\mat{I}}}
+\newcommand{\MtJ}{\widetilde{\mat{J}}}
+\newcommand{\MtK}{\widetilde{\mat{K}}}
+\newcommand{\MtL}{\widetilde{\mat{L}}}
+\newcommand{\MtM}{\widetilde{\mat{M}}}
+\newcommand{\MtN}{\widetilde{\mat{N}}}
+\newcommand{\MtO}{\widetilde{\mat{0}}}
+\newcommand{\MtP}{\widetilde{\mat{P}}}
+\newcommand{\MtQ}{\widetilde{\mat{Q}}}
+\newcommand{\MtR}{\widetilde{\mat{R}}}
+\newcommand{\MtS}{\widetilde{\mat{S}}}
+\newcommand{\MtT}{\widetilde{\mat{T}}}
+\newcommand{\MtU}{\widetilde{\mat{U}}}
+\newcommand{\MtV}{\widetilde{\mat{V}}}
+\newcommand{\MtW}{\widetilde{\mat{W}}}
+\newcommand{\MtX}{\widetilde{\mat{X}}}
+\newcommand{\MtY}{\widetilde{\mat{Y}}}
+\newcommand{\MtZ}{\widetilde{\mat{Z}}}
+
+% MATRICES (LATIN) HAT
+\newcommand{\MhA}{\widehat{\mat{A}}}
+\newcommand{\MhB}{\widehat{\mat{B}}}
+\newcommand{\MhC}{\widehat{\mat{C}}}
+\newcommand{\MhD}{\widehat{\mat{D}}}
+\newcommand{\MhE}{\widehat{\mat{E}}}
+\newcommand{\MhF}{\widehat{\mat{F}}}
+\newcommand{\MhG}{\widehat{\mat{G}}}
+\newcommand{\MhH}{\widehat{\mat{H}}}
+\newcommand{\MhI}{\widehat{\mat{I}}}
+\newcommand{\MhJ}{\widehat{\mat{J}}}
+\newcommand{\MhK}{\widehat{\mat{K}}}
+\newcommand{\MhL}{\widehat{\mat{L}}}
+\newcommand{\MhM}{\widehat{\mat{M}}}
+\newcommand{\MhN}{\widehat{\mat{N}}}
+\newcommand{\MhO}{\widehat{\mat{0}}}
+\newcommand{\MhP}{\widehat{\mat{P}}}
+\newcommand{\MhQ}{\widehat{\mat{Q}}}
+\newcommand{\MhR}{\widehat{\mat{R}}}
+\newcommand{\MhS}{\widehat{\mat{S}}}
+\newcommand{\MhT}{\widehat{\mat{T}}}
+\newcommand{\MhU}{\widehat{\mat{U}}}
+\newcommand{\MhV}{\widehat{\mat{V}}}
+\newcommand{\MhW}{\widehat{\mat{W}}}
+\newcommand{\MhX}{\widehat{\mat{X}}}
+\newcommand{\MhY}{\widehat{\mat{Y}}}
+\newcommand{\MhZ}{\widehat{\mat{Z}}}
+
+% MATRICES (GREEK)
+\newcommand{\MGamma}{\mat{\Gamma}}
+\newcommand{\MDelta}{\mat{\Delta}}
+\newcommand{\MTheta}{\mat{\Theta}}
+\newcommand{\MLambda}{\mat{\Lambda}}
+\newcommand{\MXi}{\mat{\Xi}}
+\newcommand{\MPi}{\mat{\Pi}}
+\newcommand{\MSigma}{\mat{\Sigma}}
+\newcommand{\MUpsilon}{\mat{\Upsilon}}
+\newcommand{\MPhi}{\mat{\Phi}}
+\newcommand{\MPsi}{\mat{\Psi}}
+\newcommand{\MOmega}{\mat{\Omega}}
+
+% MATRICES (GREEK) TILDE
+\newcommand{\MtGamma}{\widetilde{\MGamma}}
+\newcommand{\MtDelta}{\widetilde{\MDelta}}
+\newcommand{\MtTheta}{\widetilde{\MTheta}}
+\newcommand{\MtLambda}{\widetilde{\MLambda}}
+\newcommand{\MtXi}{\widetilde{\MXi}}
+\newcommand{\MtPi}{\widetilde{\MPi}}
+\newcommand{\MtSigma}{\widetilde{\MSigma}}
+\newcommand{\MtUpsilon}{\widetilde{\MUpsilon}}
+\newcommand{\MtPhi}{\widetilde{\MPhi}}
+\newcommand{\MtPsi}{\widetilde{\MPsi}}
+\newcommand{\MtOmega}{\widetilde{\MOmega}}
+
+% MATRICES (GREEK) HAT
+\newcommand{\MhGamma}{\widehat{\MGamma}}
+\newcommand{\MhDelta}{\widehat{\MDelta}}
+\newcommand{\MhTheta}{\widehat{\MTheta}}
+\newcommand{\MhLambda}{\widehat{\MLambda}}
+\newcommand{\MhXi}{\widehat{\MXi}}
+\newcommand{\MhPi}{\widehat{\MPi}}
+\newcommand{\MhSigma}{\widehat{\MSigma}}
+\newcommand{\MhUpsilon}{\widehat{\MUpsilon}}
+\newcommand{\MhPhi}{\widehat{\MPhi}}
+\newcommand{\MhPsi}{\widehat{\MPsi}}
+\newcommand{\MhOmega}{\widehat{\MOmega}}
+
+% MATRIX SPACING BARS (for representing row/column-vectors)
+\newcommand*{\vertbar}{\rule[-1ex]{0.5pt}{4ex}}
+\newcommand*{\horzbar}{\rule[.5ex]{4ex}{0.5pt}}
+\newcommand*{\svertbar}{\rule[-0.5ex]{0.5pt}{2ex}}
+
+% CUSTOM NUMERICS
+\newcommand{\EPS}{\text{EPS}}
+\DeclareMathOperator{\rd}{rd}
+\newcommand{\op}{\mathbin{\text{op}}}
+\newcommand{\mop}{\mathbin{\widetilde{\text{op}}}}
+
+
+% TILDE CHARACTERS
+\newcommand{\wta}{\widetilde{a}}
+\newcommand{\wtb}{\widetilde{b}}
+\newcommand{\wtc}{\widetilde{c}}
+\newcommand{\wtd}{\widetilde{d}}
+\newcommand{\wte}{\widetilde{e}}
+\newcommand{\wtf}{\widetilde{f}}
+\newcommand{\wtg}{\widetilde{g}}
+\newcommand{\wth}{\widetilde{h}}
+\newcommand{\wti}{\widetilde{i}}
+\newcommand{\wtj}{\widetilde{j}}
+\newcommand{\wtk}{\widetilde{k}}
+\newcommand{\wtl}{\widetilde{l}}
+\newcommand{\wtm}{\widetilde{m}}
+\newcommand{\wtn}{\widetilde{n}}
+\newcommand{\wto}{\widetilde{o}}
+\newcommand{\wtp}{\widetilde{p}}
+\newcommand{\wtq}{\widetilde{q}}
+\newcommand{\wtr}{\widetilde{r}}
+\newcommand{\wts}{\widetilde{s}}
+\newcommand{\wtt}{\widetilde{t}}
+\newcommand{\wtu}{\widetilde{u}}
+\newcommand{\wtv}{\widetilde{v}}
+\newcommand{\wtw}{\widetilde{w}}
+\newcommand{\wtx}{\widetilde{x}}
+\newcommand{\wty}{\widetilde{y}}
+\newcommand{\wtz}{\widetilde{z}}
+\newcommand{\wtA}{\widetilde{A}}
+\newcommand{\wtB}{\widetilde{B}}
+\newcommand{\wtC}{\widetilde{C}}
+\newcommand{\wtD}{\widetilde{D}}
+\newcommand{\wtE}{\widetilde{E}}
+\newcommand{\wtF}{\widetilde{F}}
+\newcommand{\wtG}{\widetilde{G}}
+\newcommand{\wtH}{\widetilde{H}}
+\newcommand{\wtI}{\widetilde{I}}
+\newcommand{\wtJ}{\widetilde{J}}
+\newcommand{\wtK}{\widetilde{K}}
+\newcommand{\wtL}{\widetilde{L}}
+\newcommand{\wtM}{\widetilde{M}}
+\newcommand{\wtN}{\widetilde{N}}
+\newcommand{\wtO}{\widetilde{O}}
+\newcommand{\wtP}{\widetilde{P}}
+\newcommand{\wtQ}{\widetilde{Q}}
+\newcommand{\wtR}{\widetilde{R}}
+\newcommand{\wtS}{\widetilde{S}}
+\newcommand{\wtT}{\widetilde{T}}
+\newcommand{\wtU}{\widetilde{U}}
+\newcommand{\wtV}{\widetilde{V}}
+\newcommand{\wtW}{\widetilde{W}}
+\newcommand{\wtX}{\widetilde{X}}
+\newcommand{\wtY}{\widetilde{Y}}
+\newcommand{\wtZ}{\widetilde{Z}}
+
+% HAT CHARACTERS
+\newcommand{\wha}{\widehat{a}}
+\newcommand{\whb}{\widehat{b}}
+\newcommand{\whc}{\widehat{c}}
+\newcommand{\whd}{\widehat{d}}
+\newcommand{\whe}{\widehat{e}}
+\newcommand{\whf}{\widehat{f}}
+\newcommand{\whg}{\widehat{g}}
+\newcommand{\whh}{\widehat{h}}
+\newcommand{\whi}{\widehat{i}}
+\newcommand{\whj}{\widehat{j}}
+\newcommand{\whk}{\widehat{k}}
+\newcommand{\whl}{\widehat{l}}
+\newcommand{\whm}{\widehat{m}}
+\newcommand{\whn}{\widehat{n}}
+\newcommand{\who}{\widehat{o}}
+\newcommand{\whp}{\widehat{p}}
+\newcommand{\whq}{\widehat{q}}
+\newcommand{\whr}{\widehat{r}}
+\newcommand{\whs}{\widehat{s}}
+\newcommand{\wht}{\widehat{t}}
+\newcommand{\whu}{\widehat{u}}
+\newcommand{\whv}{\widehat{v}}
+\newcommand{\whw}{\widehat{w}}
+\newcommand{\whx}{\widehat{x}}
+\newcommand{\why}{\widehat{y}}
+\newcommand{\whz}{\widehat{z}}
+\newcommand{\whA}{\widehat{A}}
+\newcommand{\whB}{\widehat{B}}
+\newcommand{\whC}{\widehat{C}}
+\newcommand{\whD}{\widehat{D}}
+\newcommand{\whE}{\widehat{E}}
+\newcommand{\whF}{\widehat{F}}
+\newcommand{\whG}{\widehat{G}}
+\newcommand{\whH}{\widehat{H}}
+\newcommand{\whI}{\widehat{I}}
+\newcommand{\whJ}{\widehat{J}}
+\newcommand{\whK}{\widehat{K}}
+\newcommand{\whL}{\widehat{L}}
+\newcommand{\whM}{\widehat{M}}
+\newcommand{\whN}{\widehat{N}}
+\newcommand{\whO}{\widehat{O}}
+\newcommand{\whP}{\widehat{P}}
+\newcommand{\whQ}{\widehat{Q}}
+\newcommand{\whR}{\widehat{R}}
+\newcommand{\whS}{\widehat{S}}
+\newcommand{\whT}{\widehat{T}}
+\newcommand{\whU}{\widehat{U}}
+\newcommand{\whV}{\widehat{V}}
+\newcommand{\whW}{\widehat{W}}
+\newcommand{\whX}{\widehat{X}}
+\newcommand{\whY}{\widehat{Y}}
+\newcommand{\whZ}{\widehat{Z}}
+% ARGUMENT D
+\newcommand{\argdot}{\,\cdot\,}
+
+% BOXED TEXT
+\usepackage{environ}
+\NewEnviron{textbox}{
+\begin{center}
+\fbox{\parbox{0.9\linewidth}{%
+\BODY
+}}
+\end{center}
+}
+
+% PROGRAM CODES / ALGORITHMS
+\definecolor{aoenglish}{rgb}{0.0, 0.5, 0.0}
+\usepackage{listings}
+
+\iftoggle{greytext}{
+\usepackage{courier}
+\lstset{
+ language          = C++,
+ basicstyle        = \color{lighttext}\footnotesize\ttfamily,
+ keywordstyle      = \color{lighttext}\footnotesize\ttfamily,
+ stringstyle       = \color{lighttext}\footnotesize\ttfamily,
+ commentstyle      = \color{lighttext}\footnotesize\ttfamily,
+ morecomment       = [l][\color{lighttext}]{\#},
+ %identifierstyle   = \color{magenta}\small\ttfamily,
+ showstringspaces  = false,
+ breaklines        = true,
+ breakatwhitespace = true,
+ breakindent       = 2ex,
+ tabsize           = 2,
+ mathescape        = true
+}
+}{
+\usepackage{courier}
+\lstset{
+ language          = C++,
+ basicstyle        = \bfseries\footnotesize\ttfamily,
+ keywordstyle      = \color{blue}\footnotesize\bfseries\ttfamily,
+ stringstyle       = \color{red}\footnotesize\ttfamily,
+ commentstyle      = \color{aoenglish}\footnotesize\ttfamily,
+ morecomment       = [l][\color{magenta}]{\#},
+ %identifierstyle   = \color{magenta}\small\ttfamily,
+ showstringspaces  = false,
+ breaklines        = true,
+ breakatwhitespace = true,
+ breakindent       = 2ex,
+ tabsize           = 2,
+ mathescape        = true
+}
+}
+\lstnewenvironment{Code}[1][]{}{}        % boxed
+\newcommand{\code}[1]{\lstinline{#1}}    % inline
+
+% TODOS
+\iftoggle{greytext}{
+\newcommand{\todo}[1]{\textbf{TODO:} #1}
+}{
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{TODO:} #1}}
+}
+
+% CUSTOM COMMANDS
+% TODO: fix the spacing issues
+% package for conditional actions
+\usepackage{xifthen}
+% color definitions
+\iftoggle{greytext}{
+\definecolor{custtitlecolor}{rgb}{1, 1, 1}
+\definecolor{defcolor}{rgb}{0.97,0.97,0.97}
+\definecolor{thmcolor}{rgb}{0.97,0.97,0.97}
+\definecolor{excolor}{rgb}{0.97,0.97,0.97}
+\definecolor{importantcolor}{rgb}{0.97,0.97,0.97}
+}{
+\definecolor{custtitlecolor}{rgb}{0, 0, 0}
+\definecolor{defcolor}{rgb}{0.75, 1, 0.75}
+\definecolor{thmcolor}{rgb}{1, 0.75, 0.75}
+\definecolor{excolor}{rgb}{1, 0.95, 0.43}
+\definecolor{importantcolor}{rgb}{1, 0.55, 0}
+}
+% conditional checks
+\newcommand{\emptyarg}[1][]{\ifthenelse{\isempty{#1}}{}{\ (#1)}}
+% custom commands with optional argument
+\newcommand{\Def}[1][]{\colorbox{defcolor}{%
+\color{custtitlecolor}{\textbf{D.\emptyarg[#1]}}}\kern+0.3ex}
+\newcommand{\Thm}[1][]{\colorbox{thmcolor}{%
+\color{custtitlecolor}{\textbf{T.\emptyarg[#1]}}}\kern+0.3ex}
+\newcommand{\Lem}[1][]{\colorbox{thmcolor}{%
+\color{custtitlecolor}{\textbf{L.\emptyarg[#1]}}}\kern+0.3ex}
+\newcommand{\Cor}[1][]{\colorbox{thmcolor}{%
+\color{custtitlecolor}{\textbf{C.\emptyarg[#1]}}}\kern+0.3ex}
+\newcommand{\Ex}[1][]{\colorbox{excolor}{%
+\color{custtitlecolor}{\textbf{Ex.\emptyarg[#1]}}}\kern+0.3ex}
+% custom commands with no argument
+\newcommand{\Com}{\textbf{Com.} }
+\newcommand{\Important}{\textbf{Important.} }
+\newcommand{\Attention}{\textbf{Attention.} }
+\newcommand{\Proof}{\textbf{Proof.} }
+\newcommand{\Intuition}{\textbf{Intuition.} }
+%\newcommand{\Trick}{\textbf{Trick.} }
+\newcommand{\Trick}[1][]{\textbf{Trick.\emptyarg[#1]}\kern+0.3ex}
+
+
+% CUSTOM TITLES
+\usepackage[explicit]{titlesec}
+\iftoggle{greytext}{
+% grey out sections
+\definecolor{sectioncolor}{rgb}{0.95,0.95,0.95}
+\definecolor{sectionbarcolor}{rgb}{0.98,0.98,0.98}
+\newcommand*{\mybox}[1]{%
+    \noindent\colorbox{sectionbarcolor}{%
+        \parbox{\dimexpr\columnwidth-2\fboxsep\relax}{%
+            \textcolor{white}{#1}}}}
+}{
+% use blue color
+\definecolor{sectioncolor}{rgb}{0,0,205}
+\newcommand*{\mybox}[1]{%
+    \noindent\colorbox{sectioncolor}{%
+        \parbox{\dimexpr\columnwidth-2\fboxsep\relax}{%
+            \textcolor{white}{#1}}}}
+}
+% Raised Rule Command:
+% - arg 1 (optional) how high to raise the rule
+% - arg 2 thickness of the rule
+\newcommand{\raisedrulefill}[2][0ex]{\leaders\hbox{\rule[#1]{1pt}{#2}}\hfill}
+% part title format
+% TODO: scale-up the letter
+\renewcommand\thepart{{\HUGE $\mathcal{\Alph{part}}$.}}
+\titleformat{\part}{\Huge\bfseries}
+{\color{sectioncolor}
+\thepart\, #1}{0em}
+{}
+% section title format
+\makeatletter
+\renewcommand\section{
+\@startsection {section}{1}{\z@}{-8pt}{3pt}{\normalfont\Large\bfseries\mybox}}
+\makeatother
+% subsection title format
+\titleformat{\subsection}{\large\bfseries}
+{\color{sectioncolor}\rule[0.3ex]{5pt}{1.5pt}
+\thesubsection\,\rule[0.3ex]{8pt}{1.5pt}\,}{0em}
+{\color{sectioncolor}#1\,\raisedrulefill[0.3ex]{1.5pt}}
+% subsubsection title format
+\titleformat{\subsubsection}{\bfseries}
+{\color{sectioncolor}\rule[0.35ex]{5pt}{0.5pt}
+\thesubsubsection\,\rule[0.35ex]{8pt}{0.5pt}\,}{0em}
+{\color{sectioncolor}#1\,\raisedrulefill[0.35ex]{0.5pt}}
+% title spacings
+\titlespacing*{\part}
+{0pt}{1.2ex plus 1ex minus .2ex}{0ex plus .2ex}
+\titlespacing*{\section}
+{0pt}{0.8ex plus 1ex minus .2ex}{0ex plus .2ex}
+\titlespacing*{\subsection}
+{0pt}{0.7ex plus 1ex minus .2ex}{0ex plus .2ex}
+\titlespacing*{\subsubsection}
+{0pt}{0.5ex plus 1ex minus .2ex}{0ex plus .2ex}
+
+% TABLE OF CONTENT
+% remove table of contents title
+\makeatletter
+\renewcommand\tableofcontents{%
+    \@starttoc{toc}%
+}
+\makeatother
+
+% SEPARATORS
+\usepackage{dashrule}
+\newcommand{\sep}{\vspace{5pt}\noindent\hrule\vspace{5pt}}
+\newcommand{\ssep}{\hdashrule[1.1ex]{\linewidth}{0.1pt}{0.3mm}}
+
+% INTER-TITLES
+\newcommand{\intertitle}[1]{\rule[0.35ex]{5pt}{0.5pt}
+ \textbf{#1} 
+\raisedrulefill[0.35ex]{0.5pt}
+}
+
+% TITLE
+\title{Numerical Methods for CSE}
+\author{Summary - Winter 2016}
+\date{Andreas Bloch}
+
+\begin{document}
+
+
+\iftoggle{greytext}{%
+  % grey out text
+  \definecolor{lighttext}{rgb}{0.95,0.95,0.95}
+  \color{lighttext}
+}{
+  % show text normel
+}
+
+% EQUATION SPACING
+% TODO: activate this for super-short summary
+
+\setlength{\abovedisplayskip}{0pt}%
+\setlength{\belowdisplayskip}{0pt}%
+\setlength{\abovedisplayshortskip}{0pt}%
+\setlength{\belowdisplayshortskip}{0pt}%
+\setlength{\jot}{3pt}% Inter-equation spacing
+
+\begin{comment}
+\setlength{\abovedisplayskip}{3pt}%
+\setlength{\belowdisplayskip}{3pt}%
+\setlength{\abovedisplayshortskip}{3pt}%
+\setlength{\belowdisplayshortskip}{3pt}%
+\setlength{\jot}{3pt}% Inter-equation spacing
+\end{comment}
+
+
+\begin{multicols*}{2}
+\raggedcolumns
+
+%\maketitle
+
+%\sep
+
+%\tableofcontents
+
+%\sep
+
+\section{VIM Commands}
+
+Format Code: \code{GG=gg}
+
+Show Line Numbers: \code{set nu}
+
+Find and Replace: \code{:\%s/\{t1\}/\{t2\}/g}
+
+\section{Programming Tricks}
+
+\subsection{Lambda Functions}
+
+\begin{Code}
+double a = ...; MatrixXd Y = ...;
+auto g = [a,&X] (VectorXd y) {
+	return a*X*y;
+};
+\end{Code}
+
+\subsection{Plots with MathGL and Figure Wrapper}
+
+\begin{Code}
+#include <figure/figure.hpp>
+
+int main() {
+    // Create vectors to keep track of (N,err)
+    vector<double> points;
+    vector<double> errors;
+    // Compute Integral for various numbers of gauss points
+    for(unsigned N = 1; N < max_N; ++N) {
+        // Compute approximated integral
+        double I_approx = doquadrule(N);
+        // Compute error
+        double err = std::abs(I_ex - I_approx);         
+        // Kepp track of results
+        points.push_back(N);
+        errors.push_back(err);
+    }
+
+    // Create plot with results
+    mgl::Figure fig;
+    fig.title("Quadrature error");
+    // linear in log-log: algebraic:   C*n^h
+    // linear in lin-log: exponential: C*q^n
+    //        (x   , y)
+    fig.setlog(true, true);
+    fig.plot(points, errors, " +r").label("Error");
+    // add a reference line (makes mostly sence for algebraic)
+    fig.fplot("x^(-4)", "k--").label("O(n^{-4})");
+    fig.xlabel("No. of quadrature nodes");
+    fig.ylabel("|Error|");
+    fig.legend();
+    fig.save("QuadrErr"); // saves as QuadrErr.eps
+    
+    return 0;
+}
+\end{Code}
+
+\section{Basic Math}
+
+\subsection{Solutions to Quadratic Equation}
+
+$
+ax^2+bx+c = 0 \Longrightarrow x_{1/2} = \frac{-b\pm\sqrt{b^2-4ac}}{2a}
+$
+
+\subsection{Complex Numbers}
+
+$
+e^{i\varphi}=\cos(\varphi) + i\sin(\varphi)
+$
+
+$z = x + iy  \Longleftrightarrow x= \Re z,  \ y = \Im z$\\
+$\begin{matrix}
+z & = x + iy\\
+  & = re^{i\varphi} \ \ \ \\
+\end{matrix}
+ \Longleftrightarrow \begin{cases}
+x = r \cos \varphi & \\
+y = r \sin \varphi
+\end{cases}
+\Longleftrightarrow \begin{cases}
+r    &= \abs{z}\\
+\varphi &= \arccos(x/r)\\
+     &= \arcsin(y/r).
+\end{cases}$
+
+$\overline{z} = x-iy \qquad \abs{z} = \sqrt{z\overline{z}} = r$
+
+$\frac{a+bi}{c+di}=\frac{v}{w}=\frac{v}{w}\frac{\conj{w}}{\conj{w}}
+=\frac{v\conj{w}}{\abs{w}^2}=
+\frac{(ac+bd)+(bc-ad)i}{c^2+d^2}$
+
+\subsection{Common Integrals}
+
+\begin{center}
+\begin{tabular}{cc}
+\toprule
+$f(x)$ & $F(x)$ \\
+\midrule
+$x^\alpha$, $(\alpha\neq 0)$ & $\frac{x^{\alpha +1}}{\alpha +1}+C$
+\\
+$\frac{1}{x}$ & $\ln(\abs{x})+C$
+\\
+\hline
+$e^x$ & $e^x + C$
+\\
+$\alpha^x$ & $\frac{\alpha^x}{\ln(\alpha)}+C$
+\\
+\hline
+$\sin(x)$ & $-\cos(x)+C$
+\\
+$\cos(x)$ & $\sin(x)+C$
+\\
+\hline
+$\sinh(x)$ & $\cosh(x) + C$
+\\
+$\cosh(x)$ & $\sinh(x) + C$
+\\
+\hline
+$\frac{1}{\sqrt{1-x^2}}$ & $\arcsin(x)+C$
+\\
+$\frac{-1}{\sqrt{1-x^2}}$ & $\arccos(x)+C$
+\\
+$\frac{1}{1+x^2}$ & $\arctan(x)+C$
+\\
+\hline
+$\frac{1}{\sqrt{1 + x^2}}$ & $\arcsinh(x)+C$
+\\
+$\frac{1}{\sqrt{x^2-1}}$ & $\arccosh(x)+C$
+\\
+$\frac{1}{1-x^2}$ & $\arctanh(x)+C$
+\\
+\hline
+$\tan(x)$ & $-\log(\abs{\cos(x)})+C$\\
+\hline
+$\log(x)$ & $x(\log(x)-1)+C$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Trig. Functions as Euler Functions}
+$
+\sin(t) = \frac{e^{it}-e^{-it}}{2i}
+\qquad
+\cos(t) = \frac{e^{it}-e^{-it}}{2i}
+$
+
+$
+\sinh(z) = \frac{e^z-e^{-z}}{2}
+\qquad
+\cosh(z) = \frac{e^z+e^{-z}}{2}
+$
+
+$
+\tan(z) = \frac{\sin(x)}{\cos(x)}
+= -i\frac{e^{ix} - e^{-ix}}{e^{ix} + e^{-ix}}
+\quad
+\tanh(z) = \frac{\sinh(z)}{\cosh(z)} = \frac{e^z-e^{-z}}{e^z+e^{-z}}
+$
+
+\subsection{Trigonometric Identities}
+$
+\sin^2(x) + \cos^2(x) = 1
+$
+\qquad
+$
+\sinh^2(x) - \cosh^2(x) = 1
+$
+
+$
+\sin^2(x) = \frac{1}{2} - \frac{1}{2}\cos(2x) = 1 - \cos^2(x)
+$
+\qquad
+$
+\cot(x) = \frac{1}{\tan(x)}
+$
+
+$
+\cos^2(x) = \frac{1}{2} + \frac{1}{2}\cos(2x) = 1 - \sin^2(x)
+$
+
+$
+\sin(\alpha + \beta) = \sin(\alpha)\cos(\beta) + \sin(\beta)\cos(\alpha)
+$
+
+$
+\cos(\alpha + \beta) = \cos(\alpha)\cos(\beta) - \sin(\alpha)\sin(\beta)
+$
+
+$
+\sin(2\alpha) = 2\sin(\alpha)\cos(\alpha)
+$
+\qquad
+$
+\cos(2\alpha) = \cos^2(\alpha) - \sin^2(\alpha)
+$
+
+\subsection{Series}
+
+\textbf{Geometric Series}
+
+$
+S_n = a_0\sum_{k=0}^n q^k = a_0\frac{1-q^{n+1}}{1-q} = a_0 \frac{q^{n+1}-1}{q-1}
+$
+
+$
+S = a_0\sum_{k=0}^\infty = \frac{1}{1-q} \quad \text{ if } \abs{q}<1
+$
+
+\textbf{Arithmetic Series}
+
+$
+S_n = \sum_{k=0}^{n}\left(k\cdot d + a_0\right)= (a_0+a_n) \cdot \frac{(n+1)}{2}
+$
+
+where
+$
+a_i = i\cdot d + a_0
+$, or $
+a_i = i(\underbrace{a_{n+1}-a_n}_{=d}) + a_0.
+$
+
+\subsection{Taylor Expansions}
+
+$
+e^z	      
+= \sum_{k=0}^{\infty} \frac{z^k}{k!} 
+= 1 + z + \frac{z^2}{2}+\frac{z^3}{3!}+\frac{z^4}{4!}+\cdots
+$
+
+$
+\sin(\varphi)  
+=\sum_{k=0}^{\infty} (-1)^k \frac{\varphi^{2k}}{(2k)!}
+= \varphi - \frac{\varphi^3}{3!} + \frac{\varphi^5}{5!}+\cdots
+\\
+\sinh(z)
+= \sum_{k=0}^{\infty} \frac{z^{2k+1}}{(2k+1)!}
+= z + \frac{z^3}{3!} + \frac{z^5}{5!}+\cdots
+$
+
+$
+\cos(\varphi)  
+= \sum_{k=0}^{\infty} (-1)^k \frac{\varphi^{2k+1}}{(2k+1)!}
+= 1 - \frac{\varphi^2}{2!} + \frac{\varphi^4}{4!}+\cdots
+$
+
+$
+\cosh(z)
+=
+\sum_{k=0}^\infty \frac{z^{2k}}{(2k)!}
+= 1 + \frac{z^2}{2!} + \frac{z^4}{4!}+\cdots
+$
+
+$
+\tan(\varphi)  
+= \ldots \text{complicated} \ldots
+= 1 + \frac{\varphi^3}{3} + \frac{2\varphi^5}{15}+\cdots
+$
+
+$
+\tanh(z)
+= \ldots \text{complicated} \ldots
+= 1 - \frac{z^3}{3} + \frac{2z^5}{15}-\cdots
+\\
+\ln(1+z)
+= \sum_{k=1}^{\infty} \frac{(-1)^{k+1}}{k} z^k
+= z - \frac{z^2}{2} + \frac{z^3}{3} + \cdots
+$
+
+$
+(1+z)^\alpha
+= \sum_{k=0}^\infty \binom{\alpha}{k} z^k
+= 1 + \alpha z + \frac{\alpha(\alpha -1)}{2!}z^2 + \cdots
+$
+
+\subsection{Even and Odd Functions}
+
+Even $\forall x\colon f(x)=f(-x)$
+
+Odd $\forall x\colon f(-x)=-f(x)$
+
+\subsection{Basis Transformation Matrix}
+
+Let $\MA$ and $\MB$ be matrices with basis vectors as columns for some
+$n$-dimensional space.
+
+$\MA=\begin{bmatrix}
+\svertbar & \svertbar && \svertbar\\
+\va_1 & \va_2 & \cdots & \va_n\\
+\svertbar & \svertbar && \svertbar
+\end{bmatrix}$
+\quad
+$\MB=\begin{bmatrix}
+\svertbar & \svertbar && \svertbar\\
+\vb_1 & \vb_2 & \cdots & \vb_n\\
+\svertbar & \svertbar && \svertbar
+\end{bmatrix}$
+
+The transformation $T\colon \R^n\to\R^n$ with transformation matrix
+$\MT\in\R^{n\times n}$ of a vector in basis representation w.r.t basis $\MA$,
+into the basis representation w.r.t. $\MB$ is:
+
+$\MT=\begin{bmatrix}
+\svertbar & \svertbar && \svertbar\\
+T(\va_1) & T(\va_2) & \cdots & T(\va_n)\\
+\svertbar & \svertbar && \svertbar
+\end{bmatrix}$
+
+\section{Matrices and Vectors}
+
+\Def[Tensor Product] of two \emph{vectors} $\vv\in\R^n$ and $\vu\in\R^m$ is the
+matrix $\MW$ which is defined as
+\[\MW = \vv\vu^\T=\begin{pmatrix}
+| & | & & |\\
+u_1\vv & u_2\vv & \cdots & u_m\vv\\
+| & | & & |\\
+\end{pmatrix}\in\R^{n\times m}.
+\]
+Hence $(\MW)_{ij}=(\vv\vu^\T)_{ij}=v_iu_j$.
+
+\sep
+
+\Def[Tensor Product] of two \emph{matrices} $\MA\in\R^{m\times n}$ and
+$\MB\in\R^{p\times n}$ is the matrix $\MW$ which is defined as
+\[
+\MW = \MA\MB^\T = \sum_{\ell=1}^{n} \va_\ell\vb^\T_\ell \in\R^{m\times p}.
+\]
+Hence, the tensor product of two matrices is just the sum of the tensor products
+of the column vectors.
+
+\sep
+
+\Def[Kronecker Product] of two \emph{matrices} $\MA\in\R^{n\times m}$ and
+$\MB\in\R^{p\times q}$ ist the matrix $\MK\in\R^{np\times mq}$, where
+{
+\setlength\fboxsep{7pt}
+\[
+\MK = \MA\otimes\MB = \begin{pmatrix}
+\boxed{a_{11}\cdot\MB} & \boxed{a_{12}\cdot\MB} & \cdots & \boxed{a_{1n}\MB}\\
+\boxed{a_{21}\cdot\MB} & \boxed{a_{22}\cdot\MB} & \cdots & \boxed{a_{2n}\MB}\\
+\vdots & \vdots & \ddots & \vdots \\
+\boxed{a_{m1}\cdot\MB} & \boxed{a_{m2}\cdot\MB} & \cdots & \boxed{a_{mn}\MB}\\
+\end{pmatrix}.
+\]
+}
+
+\subsection{Complexity of Algebraic Operations}
+
+$\alpha\in\R$, $\MA\in\R^{m\times n}, \vx\in\R^{n}$, $\vy\in\R^{m}$,
+$\MB\in\R^{n\times k}$
+
+\begin{itemize}
+  \item Scaling $\alpha\vx\in\BigO(n)$ 
+  \item Dot Product $\vx^\Hm\vx \in\BigO(n)$
+  \item Tensor Product $\vx\vy^\Hm \in\BigO(nm)$
+  \item Matrix-Vector Mult $\MA\vx\in\BigO(mn)$
+  \item Matrix-Matrix Product $\MA\MB\in\BigO(mnk)$
+  \item Solving $\linsys{\MA}{\vu}\in\BigO(mnn)$
+  \item Kroneker Product times Vec $(\MA\otimes\MB)\vx\in\BigO(n^3)$
+\end{itemize}
+
+\subsection{Tricks to Reduce Complexity}
+\begin{itemize}
+  \item Exploit Associativity of Operations
+  \item Exploit Hidden summations (Tensor Product, SVD)
+  \item Find hidden Cumulative sums
+  \item Use fast Kronecker Products
+\end{itemize}
+
+\section{Numerical Stability}
+
+\Def[Cancellation] When two numbers of about the same size are subtracted then
+we may have a large relative error (depending how the relative error was
+before).
+
+\subsection{Tricks to Avoid Cancellation}
+\begin{itemize}
+  \item Identities: Trigonometric,\ldots
+  \item Case-Distinctions
+  \item Taylor Approximations
+  \item Theorems: Vieta
+  \item Computing Diff. Quot through Approx.
+  \item Don't subtract (almost) equal and collinear vectors
+  \item Avoid alternating signs in series
+\end{itemize}
+
+
+\section{Linear Systems of Equations}
+
+\begin{itemize}
+  \item Gauss solve $\BigO(n^3)$
+  \item LU: decomp $\BigO(n^3)$, solve $\BigO(n^2)$
+  \item Inverse: compute $\BigO(n^3)$, solve $\BigO(n^2)$
+\end{itemize}
+
+\section{Singular Value Decomposition}
+\[
+\MA =
+\MU\MSigma\MV^\Hm
+=\sum_{i=1}^{r}\sigma_i\vu_i\vv_i^\Hm,
+\qquad\MA\in\K^{m\times n},
+\]
+$p:=\min\set{m,n}$, $r:=\rank(\MA)$, $\MSigma=\diag(\sigma_1,\ldots,\sigma_p)$
+
+$\sigma_1>\sigma_2>\ldots>\sigma_r>\sigma_{r+1}=\cdots=\sigma_p=0$
+
+\ssep
+
+Full: 
+\begin{itemize}
+  \item $\MU\in\K^{m\times m}$ $[\cR(\MA)|\cN(\MA)]$\qquad (unitary)
+  \item $\MSigma\in\K^{m\times n}$\qquad\qquad\qquad\qquad\,\, (generalized
+  diagonal)
+  \item $\MV\in\K^{n\times n}$ $[\cR(\MA^\Hm)|\cN(\MA^\Hm)]$\qquad (unitary)
+\end{itemize}
+
+\ssep
+
+Economical:
+\begin{itemize}
+  \item $\MU\in\K^{m\times p}$ $[\cR(\MA)]$\qquad (orthogonal columns)
+  \item $\MSigma\in\K^{p\times p}$\qquad\qquad\qquad (diagonal)
+  \item $\MV\in\K^{n\times p}$ $[\cR(\MA^\Hm)]$\qquad (orthogonal columns)
+\end{itemize}
+
+\ssep
+
+\textbf{Numerical Rank}
+$r:=\max_{j\in\set{1,\ldots,p}}\left(\frac{\sigma_j}{\sigma_1}\geq TOL\right)$
+
+
+\ssep
+
+\textbf{Cost of Eco SVD} $\BigO(\min\set{m,n}^2\max\set{m,n})$
+
+$\to$ Linear in big dimension if other is small.
+
+\section{Least Squares}
+
+\[
+\MA\vx=\vb,
+\quad\MA\in\R^{m\times n},
+\,\vx\in\R^n,\,\vb\in\R^{m}
+\]
+There is no solution if $\vb\not\in\cR(\MA)$.
+
+\ssep
+
+\Def[A Least Squares Solution]
+\begin{align*}
+\vx^*\in&\argmin_{\vx\in\R^n}\norm{\MA\vx-\vb}_2
+=\argmin_{\vx\in\R^n}\sum_{i=1}^n\left(\sum_{j=1}^m a_{ij}x_j-b_j\right)^2
+\\
+&=\text{lsq}(\MA,\vb)=\dset{\vx}{\MA^\T\MA\vx=\MA^\T\vb}.
+\end{align*}
+
+\begin{itemize}
+  \item \textbf{unique} iff $\rank(\MA)=n$, $\ker(\MA)=\set{\vo}$
+  \item \textbf{not unique} iff $\rank(\MA)<n$, then
+  $\ker(\MA)\supset\set{\vo}$.
+\end{itemize}
+
+\ssep
+
+\textbf{Geometric Interpretation} Projection of $\vb$ onto $\cR(\MA)$. So
+$\vb-\MA\vx$ will be orthogonal to any $\vz=\MA\vy\in\cR(\MA)$, so writing
+\[
+\scprod{\MA\vy,\vb-\MA\vx}= 0
+\,\Longleftrightarrow\,
+\MA^\T\MA\vx=\MA^\T\vb
+\] 
+leads to the normal equations that are satisfied iff $\vx$ is a lsq solution.
+
+\textbf{Advantage} $n\times n$ system is possibly smaller than the orig.
+
+\ssep
+
+\Def[Generalized Solution]
+\[
+\vx^\dagger = \min\set{\norm{\vx}_2}{\vx\in\text{lsq}(\MA,\vb)}
+\]
+
+\subsection{Four Fundamental Subspaces Theorem}
+
+For $\MA\in\R^{m\times n}$, $\MA\colon\R^n\to\R^m$ we have
+\begin{align*}
+\cN(\MA)&\perp\cR(\MA^\T) & \cN(\MA^\T)&\perp\cR(\MA)\\
+\cN(\MA)&\oplus\cR(\MA^\T)=\R^n & \cN(\MA^\T)&\oplus\cR(\MA)=\R^m 
+\end{align*}
+
+\subsection{Solution Spaces of Lsq Solutions}
+
+\Thm For $\MA\in\R^{m\times n}$, $(m\geq n)$ it holds that
+\begin{itemize}
+  \item $\cN(\MA^\T\MA)=\cN(\MA)\subset\R^n$
+  \item $\cR(\MA^\T\MA)=\cR(\MA)\subset\R^n$
+\end{itemize}
+
+\subsection{Normal Equation Methods}
+
+\subsubsection{Through Normal Equation}
+\begin{enumerate}
+  \item Compute $\MC:=\MA^\T\MA$, $\BigO(n^2m)$
+  \item Compute rhs vec $\vc:=\MA^\T\vb$, $\BigO(nm)$
+  \item Solve LSE $\MC\vx=\vc$, $\BigO(n^3)$
+\end{enumerate}
+Total complexity: $\BigO(n^3+n^2m)$.
+
+If $\MA$ has full rank, then the LSE is s.p.d. $\to$ no worries about
+stability, 3-loop elimination is good, no pivoting.
+\begin{itemize}
+  \item $\MA^\T\MA$ is symmetric, and
+  \item $\forall\vx\neq\vo\colon\vx^\T\MA^\T\MA\vx=\norm{\MA\vx}_2^2>0$, since
+  $(\ker(\MA)=\set{\vo}$.
+\end{itemize}
+
+\subsubsection{Orthogonal Transformation Methods}
+
+\textbf{Idea:} Transform $\MA\vx=\vb$ into $\MtA\vx=\vtb$ such that
+$\text{lsq}(\MA,\vb)=\text{lsq}(\MtA,\vtb)$. Now the nice thing is that for
+orthogonal transformations $\MT$ it hods that
+
+$\argmin_\vx\norm{\MA\vx-\vb}_2
+\argmin_\vx\norm{\MT\MA\vx-\MT\vb}_2
+$
+
+and orthogonal transformations are numerically stable.
+
+Orth. Transf.: Rotations, Permutations, Reflections, \ldots
+
+\textbf{Approach:} Transform $\MA$ into upper triangular $\MR$.
+\begin{gather*}
+\begin{align*}
+\argmin_{\vx\in\R^n}
+\norm{\MA\vx-\vb}
+=
+\argmin_{\vx\in\R^n}
+\norm{\begin{bmatrix}
+\MR\\
+\MO
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+\vdots\\
+x_n
+\end{bmatrix}
+-
+\begin{bmatrix}
+\widetilde{b}_1\\
+\vdots\\
+\widetilde{b}_n\\
+\vdots\\
+\widetilde{b}_m\\
+\end{bmatrix}
+}
+=
+\argmin_{\vx\in\R^n}
+\norm{\begin{bmatrix}
+\MR
+\end{bmatrix}
+\begin{bmatrix}
+x_1\\
+\vdots\\
+x_n
+\end{bmatrix}
+-
+\begin{bmatrix}
+\widetilde{b}_1\\
+\vdots\\
+\widetilde{b}_n
+\end{bmatrix}
+}
+\end{align*}
+\end{gather*}
+
+\ssep
+
+\textbf{Solving Least Squares via QR-Transformation}
+
+\begin{align*}
+&\argmin_{\vx\in\R^n}\norm{\MA\vx-\vb}_2
+=\argmin_{\vx\in\R^n}\norm{\MQ\MR\vx-\vb}_2\\
+&=\argmin_{\vx\in\R^n}\norm{\MQ^\T\MQ\MR\vx-\MQ^\T\vb}_2
+=\argmin_{\vx\in\R^n}\norm{\MR\vx-\MQ^\T\vb}_2
+\end{align*}
+Then we remove the last $n$ rows of $\MR$ and $\MQ^\T\vb$ and if $\rank(\MA)=n$
+we can invert $\MR$ and get the solution $\vx=\MtR^{-1}\vtb$.
+
+\ssep
+
+\textbf{QR-Decomposition} $\vq_1=\frac{1}{\norm{\va_1}}\va_1$
+\begin{gather*}
+\begin{align*}
+\underbrace{
+\begin{pmatrix}
+\\
+\va_1 & \cdots & \va_n\\
+\\
+\end{pmatrix}}_{\MA}
+=
+\underbrace{
+\begin{pmatrix}
+\\
+\vq_1 & \cdots & \vq_n\\
+\\
+\end{pmatrix}}_{\MQ}
+\underbrace{\begin{pmatrix}
+\vq_1^\T\va_1 & \vq_1^\T\va_2 & \cdots & \vq_1^\T\va_n\\
+0 & \vq_2^\T\va_2 & \cdots & \vq_2^\T\va_n\\
+\vdots &\ddots &\ddots&\vdots\\
+0 &\cdots &0&\vq_n^\T\va_n
+\end{pmatrix}}_{\MR}
+\end{align*}
+\end{gather*}
+
+Complexity $\BigO()$
+
+\ssep
+
+Sidenote: Adding a column to $\MA$ in QR decomp:
+
+$\vq_{n+1}=\frac{1}{\norm{\va_{n+1}-\MQ\MQ^\T\va_{n+1}}_2}(\va_{n+1}-\MQ\MQ^\T\va_{n+1})$
+
+Complexity $\BigO(mn)$
+
+\ssep
+
+Adding a row to $\MA$ in QR decomp: see script.
+
+\ssep
+
+Other orthogonal transformation methods are: Attacks with Givens rotations,
+or Householder reflections.
+
+\subsection{Total Least Squares}
+
+\textbf{Given} $\MA\in\K^{m\times n}$, $m>n$, $\rank(\MA)=n$, $\vb\in\K^n$. Both
+with measurement errors.
+
+\textbf{Goal} Find \emph{nearest} solvable linear system
+$\linsys{\MtA}{\vtb}$:
+\[
+\argmin_{\linsys{\MtA}{\vtb}}
+\norm{\linsys{\MA}{\vb}-\linsys{\MtA}{\vtb}}_F
+\quad
+\text{s.t. }\vtb\in\cR(\MtA)
+\]
+
+\textbf{Solution} is the best rank-$n$-approximation of $\linsys{\MA}{\vb}$.
+
+Let $\linsys{\MA}{\vb}=\MU\MSigma\MV^\Hm$, then
+\[
+\linsys{\MtA}{\vtb}=(\MU)_{:,1:n}(\MSigma)_{1:n,1:n}(\MV_{:,1:n})^\Hm
+\]
+and the solution of the equation is
+\begin{align*}
+\linsys{\MtA}{\vtb}(\MV)_{:,n+1}=\vo\\
+\MtA(\MV)_{1:n,n+1} + \vtb(\MV)_{n+1,n+1}=\vo\\
+\MtA\underbrace{\frac{1}{(\MV)_{n+1,n+1}}(\MV)_{1:n,n+1}}_{=\vtx}=\vtb
+\end{align*}
+
+\subsection{Constrained Least Squares}
+
+\textbf{Given:} $\MA\in\R^{m\times n}$, $m\geq n$, $\rank(\MA)=n$, $\vb\in\R^m$
+
+\qquad \quad\,\, $\MC\in\R^{p\times n}$, $p<n$, $\rank(\MC)=p$, $\vd\in\R^p$
+
+\textbf{Goal:}
+$
+\vx^*=\argmin_{\vx\in\R^n} \norm{\MA\vx-\vb}_2 \quad\text{s.t. }\MC\vx=\vd
+$
+
+\subsubsection{Solution via Lagrangian Multipliers}
+
+\[
+\vx^*=\argmin_{\vx\in\R^n}
+\overbrace{\max_{\vlambda}
+\underbrace{\frac{1}{2}\norm{\MA\vx-\vb}_2^2 -
+\vlambda^\T(\MC\vx-\vd)}_{=:L(\vx,\vlambda)}}^{=\infty\text{ if constraint
+}\MC\vx=\vd\text{ is volated}}
+\]
+Now the clue is that $L$ must be flat at the solution point, computing the
+partial derivatives gives us the \emph{augmented normal equations}.
+\begin{gather*}
+\begin{align*}
+\begin{matrix*}[l]
+\frac{\partial L}{\partial \vx} = \MA^\T(\MA\vx-\vb) + \MC^\T\vlambda = \vo
+\\
+\frac{\partial L}{\partial \vlambda} = \MC\vx - \vd = \vo
+\end{matrix*}
+\,\Longleftrightarrow\,
+\begin{bmatrix}
+\MA^\T\MA & \MC^\T\\
+\MC & \MO
+\end{bmatrix}
+\begin{bmatrix}
+\vx\\
+\vlambda
+\end{bmatrix}
+=
+\begin{bmatrix}
+\vb\\
+\vd
+\end{bmatrix}
+\end{align*}
+\end{gather*}
+Solving them gives us $\vx$ as part of the sol.
+
+\subsubsection{Solution via SVD}
+
+\section{Filtering Algorithms}
+
+\subsection{Signal Sequences}
+
+\Def[Bi-Infinite Sequence] $(x_j)_{j\in\Z}\in\ell^\infty(\Z)$.
+
+\Com $\ell^\infty$ means that it's bounded.
+
+\Com If $x_j$ is samped at aequidistant points in time (time interval
+$\Delta t$), then $x_j\sim X(j\cdot\Delta t)$.
+
+\Com if the signal is finite
+
+$(x_j)_{j\in\Z}=(\ldots,0,x_0,x1,\ldots,x_n,0,\ldots)$ 
+
+then we can identify it
+with a vector $\vx\in\R^n$.
+
+\subsection{LT-FIR Channels}
+
+\Def[Filter/Channel] $F\colon\ell^\infty(\Z)\to\ell^\infty(\Z)$
+
+\Def[Impulse] at $t_0$ is the sequence $(\delta_{0,j})_{j\in\N}$
+
+\Def[Impulse Response] $(h_j)_{j\in\Z}=F((\delta_{ij}))_{j\in\Z}$
+
+\Def[Finite Channel] for every finite input it produces a finite output.
+
+\Def[Causal Channel] if the output does not start before the input.
+
+\Def[Shift Operator] $S_m((x_j)_{j\in\Z})=(x_{j+m})_{j\in\Z}$.
+
+\Def[Time-Invariant] for all inputs, shifting the input leads to the same output
+shifted by the same amout; it \emph{commutes} with the shift operator:
+\[
+\forall(x_j)_{j\in\Z}
+\,
+\forall m
+\quad
+F(S_m((x_j)_{j\in\Z}))=S_m(F((x_j)_{j\in\Z}))
+\]
+
+\Def[Linear Channel] 
+
+$F(\alpha(x_j)_{j\in\Z}+\beta(y_j)_{j\in\Z})=
+\alpha F((x_j)_{j\in\Z})+\beta F((y_j)_{j\in\Z})
+$
+
+\Def[LT-FIR Channel] is a channel that is \emph{linear}, \emph{time-invariant},
+\emph{causal}, and \emph{finite}.
+
+\subsection{Discrete Convolutions}
+
+\textbf{LT-FIR Formula}
+
+The output $(y_j)_{j\in\Z}$ for the input $(x_j)_{j\in\Z}$ of a LT-FIR channel
+$F$ with impulse response $(h_j)_{j\in\Z}$ can be written as a weighted sum of
+time-shifted impulse responses:
+\begin{align*}
+F\left((x_j)_{j\in\Z}\right)
+&=F\left(\sum_{k\in\Z} x_k (\delta_{k,j})_{j\in\Z}\right)
+\stackrel{\text{lin.}}{=}
+\sum_{k\in\Z} F\left(x_k(\delta_{k,j})_{j\in\Z}\right)\\
+&\stackrel{\text{lin.}}{=}
+\sum_{k\in\Z} x_k F\left((\delta_{k,j})_{j\in\Z}\right)
+\stackrel{\text{tim. inv.}} =
+\sum_{k\in\Z} x_k (h_{j-k})_{j\in\Z}.\\
+\end{align*}
+If the signal is finite then the output will be too, and we can write it as the
+following matrix equation:
+\begin{gather*}
+\begin{align*}
+\underbrace{
+\begin{pmatrix}
+y_0\\
+y_1\\
+\vdots\\
+y_{m+n-2}
+\end{pmatrix}}_{
+\substack{
+\text{Output Signal}\\
+\text{Vector }\vy
+}}
+=
+\underbrace{
+\left(
+\begin{array}{*{9}{@{}C{35pt}@{}}}
+h_0 & 0 & 0 & 0 & \cdots & 0 \\
+h_1 & h_0 & 0 & 0 & \cdots & 0 \\
+h_2 & h_1 & h_0 & 0 & \cdots & 0\\
+\vdots & \ddots & \ddots & \ddots & \ddots & \vdots \\
+h_{m-2} & \cdots & h_2 & h_1 & h_0 & 0\\
+h_{m-1} & h_{m-2} & \cdots & h_2 & h_1 & h_0\\
+0 & h_{m-1} & h_{m-2} & \cdots & h_2 & h_1\\
+0 & 0 & h_{m-1} & h_{m-2} & \cdots & h_2 \\
+\vdots & \ddots & \ddots & \ddots & \ddots & \vdots \\
+0 & \cdots & \cdots & 0 & h_{m-1} & h_{m-2} \\
+0 & \cdots & \cdots & 0 & 0 & h_{m-1} \\
+\end{array}
+\right)}_{
+\text{Filter Mapping Matrix }\MF}
+\underbrace{
+\begin{pmatrix}
+x_0\\
+x_1\\
+x_2\\
+\vdots\\
+x_{n-1}
+\end{pmatrix}}_{
+\substack{
+\text{Input Signal}\\
+\text{Vector }\vx
+}}
+\end{align*}
+\end{gather*}
+This is called a \emph{discrete convolution}.
+
+\ssep
+
+\Def[Discrete Convolution] Given 
+
+$\vx=(x_0,\ldots,x_{n-1})^\T\in\K^n$,
+$\vh=(h_0,\ldots,h_{m-1})^\T\in\K^m$ 
+
+their \emph{discrete convolution} is the
+vector $\vy\in\K^{m+n-1}$ (0-indexing) with components
+\[
+y_k = \sum_{j=0}^{\mathclap{\min\set{n-1,m-1}}} h_{k-j}x_j,\quad
+k=0,\ldots,m+n-2 \quad (h_j:= 0 \text{ for }j<0).
+\]
+
+Another shorter notation for the convolution is:
+\[
+\vy = \vh \star \vx = \vx \star \vh.
+\]
+
+\Com $\star$ is commutative, since
+
+$
+\vy = \sum_{k\in\Z} x_kh_{j-k}= \vx\star\vh \stackrel{\ell:=j-k}{=}
+\sum_{\ell\in\Z} x_{j-\ell}h_{\ell}=\vh\star\vx.
+$
+
+\sep
+
+\Def[$n$-Periodic Signal] $\forall j\in\Z\colon x_j=x_{j+n}$.
+
+\Com So we need $n$ numbers to describe it: $x_0,\ldots,x_{n-1}$.
+
+\Def[$n$-Periodic Impulse] $\sum_{k\in\Z}(\delta_{nk,j})_{j\in\Z}$
+
+\ssep
+
+Since an $n$-periodic signal has been going on since forever, we know that the
+output of an LT-FIR filter $F$ also to be $n$-periodic. So $F$ can be described
+by a linear mapping $\R^{n}\to\R^{n}$.
+\begin{gather*}
+\begin{align*}
+\vy=\MF\vx=
+\overbrace{\begin{bmatrix}
+p_0 & p_{n-1} & p_{n-2} & \cdots & &\cdots & p_1\\
+p_1 & p_{0} & p_{n-1} & \cdots & &\cdots & p_2\\
+p_2 & p_1 & p_0 & \ddots & & & \vdots\\
+\vdots & \vdots & \ddots & \ddots & \ddots\\
+\vdots & \vdots & & \ddots & \ddots & \ddots & \vdots \\
+p_{n-2} & p_{n-3} & \cdots & & \ddots & p_0 & p_{n-1}\\
+p_{n-1} & p_{n-2} & \cdots & & \cdots & p_1 & p_0
+\end{bmatrix}}^{\MF=\circul(\vp),\quad \vp=(p_0,\ldots,p_{n-1})}
+\begin{bmatrix}
+x_0\\
+x_1\\
+\vdots\\
+\\
+\vdots\\
+x_{n-1}
+\end{bmatrix}
+\end{align*}
+\end{gather*}
+So $(\MF)_{ij}=p_{i-j}$, $1\leq i,j\leq n$, and $p_j=p_{j+n}$ for $1-n\leq j<0$.
+So
+\[
+y_k=\sum_{j=0}^{n-1} p_{k-j}x_j
+\]
+Note that the coefficients $p_0,\ldots,p_{n-1}$ represent the \emph{periodic
+impulse response}, but do not (necessarily) agree with the \emph{impulse
+response}. They satisfy the following relationship
+\[
+p_j=\sum_{k=0}^{\floor{\frac{m-j}{n}}}h_{j+nk},
+\quad
+j\in\set{0,\ldots,n-1},
+\]
+if $(\ldots,0,h_0,\ldots,h_{m},0,\ldots)$ is the \emph{impulse response} of the
+filter $F$. This process is called the $n$-periodic convolution.
+
+\ssep
+
+\Def[$n$-Periodic Discrete Convolution] Given two $n$-periodic sequences
+$(p_k)_{k\in\Z}$ and $(x_k)_{k\in\Z}$ the $n$-periodic convolution yields the
+$n$-periodic sequence:
+\[
+(y_k)_{k\in\Z} = (p_k)_{k\in\Z}\star_n(x_k)_{k\in\Z}
+\]
+\[
+y_k:=\sum_{j=0}^{n-1}p_{k-j}x_j=\sum_{j=0}^{n-1}x_{k-j}p_j,
+\quad k\in\Z
+\]
+Or in matrix-vector notation we have
+\[
+\vy=\vp\star_n\vx=\circul(\vp)\vx=\circul(\vx)\vp=\vx\star_n\vp.
+\]
+Note the commutativity of $\star_n$.
+
+\sep
+
+Periodic Convolution $\stackrel{\sim}{=}$ mult. w. a circulant matrix
+
+\sep
+
+\Def[Circulant Matrix] A matrix $\MC=[c_{ij}]_{i,j=1}^n\in\K^{n\times n}$ is
+\emph{circulant} iff
+\[
+\exists (p_j)_{j\in\Z}\colon\quad
+\begin{matrix}
+(p_j)_{j\in\Z}\text{ is an }n\text{-periodic sequence}\\
+\land \quad \forall i,j,\, 1\leq i,j\leq n\colon c_{ij}=p_{j-i}.
+\end{matrix}
+\]
+
+\subsection{Disc. Conv. via Periodic Disc. Conv.}
+
+We want to compute the discrete convolution
+
+$\vy=\vh\star\vx$, where $\vx\in\R^{n}$, $\vh\in\R^{m}$, 
+ 
+through a function that computes the periodic convolution. In order to get the
+right result we have to choose a sufficently large period, such that the
+convolutions do not interfere:
+\[
+p=2\max\set{m,n} - 1
+\]
+Then we can compute the discrete convolution through the periodic convolution by
+making use of $0$-padding:
+\[
+\vth=\begin{bmatrix}
+\vh\\
+\vo
+\end{bmatrix}\in\R^{p},
+\quad
+\vtx=\begin{bmatrix}
+\vx\\
+\vo
+\end{bmatrix}\in\R^{p},
+\]
+Then we have:
+\[
+\vy = \vh\star\vx = (\vth\star_p\vtx)_{1:(m+n-1)}
+\]
+
+\sep
+
+\subsection{Discrete Fourier Transforms}
+
+\textbf{Observation:} All circulant matrices in $\R^{n\times n}$ have the same
+eigenvectors (unit length) but different eigenvalues.
+
+\sep
+
+\Def[$n$-th Root of Unity]
+
+$
+\omega_n := e^{-i\frac{2\pi}{n}}
+=
+\cos\left(\frac{2\pi}{n}\right)
+-i\sin\left(\frac{2\pi}{n}\right)
+$
+
+Properties: \qquad $
+\sum_{k=0}^{n-1}\omega_n^{kj}=\begin{cases}
+n, & \text{if }j\equiv_n0,\\
+0, & \text{otherwise}.
+\end{cases}
+$
+
+$
+\omega_n^n=1
+\quad
+\omega_n^{-j}=\conj{\omega_n^j}
+\quad
+\omega_j^{\frac{1}{2}}=-1
+\quad
+\forall k\in\Z\colon\omega_n=\omega_n^{k+n}
+$
+
+
+\sep
+
+\Def[Fourier Matrix] The fourier matrix 
+\[
+\MF_n
+:=\left[\omega_n^{\ell j}\right]_{\ell,j=0}^{n-1}\in\C^{n\times n}
+\] 
+contains the eigenvectors $\set{\vv_0,\ldots,\vv_n}$ of any
+circulant matrix in $\C^{n\times n}$.
+\begin{gather*}
+\begin{align*}
+\MF_n = 
+\begin{blockarray}{ccccccc}
+\begin{block}{[cccccc]c}
+1 & 1 & 1 & 1 & \cdots & 1 & \vv_0^\T \\
+1 & \omega_n^{1} & \omega_n^{2} & \omega_n^{3} & \cdots & \omega_n^{n-1} &
+\vv_1^\T\\
+1 & \omega_n^{2} & \omega_n^{4} & \omega_n^{6} & \cdots & \omega_n^{2(n-1)} &
+\vv_2^\T\\
+1 & \omega_n^{3} & \omega_n^{6} & \omega_n^{9} & \cdots & \omega_n^{3(n-1)} &
+\vv_3^\T\\
+1 & \omega_n^{4} & \omega_n^{8} & \omega_n^{12} & \cdots & \omega_n^{4(n-1)} &
+\vv_4^\T\\
+\vdots & \vdots & \vdots & \vdots &  & \vdots\\
+1 & \omega_n^{n-2} & \omega_n^{2(n-2)} & \omega_n^{3(n-2)} & \cdots &
+\omega_n^{(n-1)(n-2)} & \vv_{n-2}^\T\\
+1 & \omega_n^{n-1} & \omega_n^{2(n-1)} & \omega_n^{3(n-1)} & \cdots &
+\omega_n^{(n-1)^2} & \vv_{n-1}^\T\\
+\end{block}
+\vv_0 & \vv_1 & \vv_2 & \vv_3 & \cdots & \vv_{n-1}\\
+\end{blockarray}
+\end{align*}
+\end{gather*}
+
+\Com Note that the eigenvectors do not have unit length!
+
+\Com The column vectors are called the \emph{trigonometric basis}.
+
+\ssep
+
+The matrix $\MF_n$ has the following properties:
+
+$
+\MF_n=\MF_n^\T \text{(symmetric)}
+\qquad
+\MF_n\neq\MF_n^\Hm \text{(not hermitian)}
+$
+
+$
+\frac{1}{\sqrt{n}}\MF_n \text{ is \emph{unitary}}
+\qquad
+(\frac{1}{\sqrt{n}}\MF_n)^\Hm(\frac{1}{\sqrt{n}}\MF_n)=\MI
+$
+
+$(\frac{1}{\sqrt{n}}\MF_n)^{-1}=\frac{1}{\sqrt{n}}\MF_n^\Hm =
+    \frac{1}{\sqrt{n}}\conj{\MF}_n^\T=
+    \frac{1}{\sqrt{n}}\conj{\MF}_n$
+    
+$\MF_n^\Hm\MF_n=n\cdot\MI
+    \quad\text{and}\quad(\MF_n)^{-1}=\frac{1}{n}\overline{\MF}_n,
+    \text{ because}$
+  
+\begin{gather*}
+\begin{align*}
+(\MF_n)^{-1}
+=\left(\frac{\sqrt{n}}{\sqrt{n}}\MF_n\right)^{-1}
+=\frac{1}{\sqrt{n}}\left(\frac{1}{\sqrt{n}}\MF_n\right)^{-1}
+=\frac{1}{\sqrt{n}}\left(\frac{1}{\sqrt{n}}\MF_n\right)^{\Hm}
+=\frac{1}{n}\MF_n^{\Hm}
+=\frac{1}{n}\conj{\MF_n}.
+\end{align*}
+\end{gather*}
+
+\sep
+
+\Def[Discrete Fourier Transform (DFT)]
+
+A DFT (\emph{forward} transform) is the linear map 
+\[
+\cF_n\colon\C^n\to\C^n,
+\quad
+\vy\mapsto \MF_n\vy\in\C^n.
+\]
+So we get
+\[
+\vc=\MF_n\vy
+\qquad
+c_k:=\sum_{j=0}^{n-1}y_j\omega_n^{kj}, \quad k=0,\ldots,n-1.
+\]
+And using the inverse of $\MF_n$, we get the \emph{inverse} DFT
+\[
+\vy=\frac{1}{n}\overline{\MF}_n\vc
+\qquad
+y_k = \frac{1}{n}\sum_{j=0}^{n-1}c_j\omega_n^{-kj},
+\quad k=0,\ldots,n-1.
+\]
+
+\Com $\MF_n^{-1}=\frac{1}{n}\conj{\MF}_n$.
+
+\sep
+
+\Lem[Diagonalization of Circulant Matrices] 
+
+Any circulant matrix $\MC:=\circul(\vu)\in \K^{n\times n}$ can be diagonalized
+as follows:
+\[
+\MC = \frac{1}{n}\overline{\MF}_n\diag(\MF_n\vu)\MF_n
+\]
+
+\ssep
+
+\Cor[Multiplication with Circulant Matrices] 
+
+The multiplication of $\vx\in\R^{n}$ with a circulant matrix
+$\MC:=\circul(\vu)\in\K^{n\times n}$ can be expressed as follows:
+\begin{align*}
+\vu\star_n\vx = \MC\vx
+&= \frac{1}{n}\overline{\MF}_n\diag(\MF_n\vu)\MF_n\vx\\
+&= \text{invdft}(\text{dft}(\vu)\odot\text{dft}(\vx)).
+\end{align*}
+
+\subsection{Fast Fourier Transform}
+
+$\BigO(n\log(n))$ for inverse and forward.
+
+\subsection{Toeplitz Matrix Techniques}
+
+See book on how to estimate the parameters of a filter.
+
+\section{Interpolation}
+
+\Def[Interpolation Problem]
+
+\textbf{Given} $(t_i,y_i)_{i=0}^{n}\in I\times\R$
+
+\textbf{Seeked} Interpolant $f$, $f\in C^0(I)$ that satisfies the interpolation
+conditions: $
+\forall i\in\set{0,\ldots,n}\colon
+f(t_i)=y_i.
+$ 
+
+\subsection{Interpolation in General} 
+
+
+\Def[Cardinal Basis] A \emph{cardinal basis} 
+$\set{b_0,\ldots,b_n}$ (set of functions) for an interpolation problem
+satisfies the following:
+\[
+\forall i,j\in\set{0,\ldots,n}\colon
+\quad
+b_i(t_j) = \delta_{ij}:=\begin{cases}
+1, & i=j,\\
+0, & i\neq j.
+\end{cases}
+\]
+
+\sep
+
+If we have $n+1$ basis functions
+$\set{b_0,\ldots,b_n}$ and $n+1$ points $(t_i,y_i)_{i=0}^n$, then the
+interpolation problem has a unique solution $\valpha$ (assuming the nodes are
+pairwise different):
+\[
+\MA\valpha=\vy
+\quad\Longleftrightarrow\quad
+\begin{bmatrix}
+b_0(t_0) & \cdots & b_n(t_0)\\
+b_0(t_1) & \cdots & b_n(t_1)\\
+\vdots & \ddots & \vdots\\
+b_0(t_n) & \cdots & b_n(t_n)\\
+\end{bmatrix}
+\begin{bmatrix}
+\alpha_0\\
+\alpha_1\\
+\vdots\\
+\alpha_n
+\end{bmatrix}
+=
+\begin{bmatrix}
+y_0\\
+y_1\\
+\vdots\\
+y_n
+\end{bmatrix}
+\]
+So the solution is $\valpha=\MA^{-1}\vy$. As we can see it's obtained through a
+linear map $\MA^{-1}$. The interpolant is thus determined through the linear
+mapping (which we call an interpolation scheme):
+\begin{align*}
+I_\cT \colon \R^n&\to C^{0}(I)\\
+\vy&\mapsto f(t) = \sum_{j=0}^n (\MA^{-1}\vy)_j b_j(t)
+\end{align*}
+given a fixed set of nodes $\cT=\set{t_0,\ldots,t_n}$.
+
+Now if $\set{b_0,\ldots,b_n}$ is a \emph{cardinal basis} for the interpolation
+problem, then $\MA=\MI$, and thus we have
+\[
+f(t) = \sum_{j=0}^ny_jb_j(t).
+\]
+
+\subsection{(Global) Polynomial Interpolation}
+
+\Def[Vector Space $\cP_n$]
+\[
+\cP_n:=\dset{t\mapsto\sum_{j=0}^n\alpha_jt^j}{\alpha_0,\ldots,\alpha_n\in\R}
+\]
+
+\ssep
+
+\Cor $\dim(\cP_n)=n+1$.
+
+\ssep
+
+\Def[Monomial Basis for $\cP_n$] $\set{t\mapsto t^k}_{k=0}^n$
+
+\ssep
+
+\Def[Eval. of Polynomials with Horner Scheme]
+\[
+p(t) =
+t\cdot(\cdots(t\cdot(t\cdot(\alpha_kt+\alpha_{k-1})+\alpha_{k-2}\cdots)+\alpha_2
+)+\alpha_1)+\alpha_0
+\]
+\Com $\BigO(n)$
+
+\subsubsection{Lagrange Interpolation}
+
+The cardinal basis for an interpolation problem (with distinct increasing
+nodes, and as above) is given trough the lagrange polynomials
+$\set{L_i}_{i=0}^n$.
+\[
+L_i(t)=\prod_{\substack{j=0\\j\neq i}}^{n}
+\frac{(t-t_j)}{(t_i-t_j)}\in\cP_n.
+\]
+\Com It's easy to see that $\forall i,j\in\set{0,\ldots,n}\colon
+L_i(t_j)=\delta_{ij}$.
+
+Then the interpolant is given by
+\[
+f(t) = \sum_{i=0}^n y_iL_i(t) = \sum_{i=0}^n y_i
+\prod_{\substack{j=0\\j\neq i}}^{n}
+\frac{(t-t_j)}{(t_i-t_j)}.
+\]
+
+\sep
+
+\subsection{Algorithms for Poly. Interpolation}
+
+See book: Aitken Neville, Newton Scheme, \ldots
+
+\section{Approx. of Functions in 1D}
+
+\Def[Approx. Scheme] = Sampling + Interpolation
+\begin{gather*}\begin{align*}
+f\colon I\subset\R\to\R
+\stackrel{\text{sampling}}{\to}
+(t_i,y_i:=f(t_i))_{i=0}^n
+\stackrel{\text{interpolation}}{\to}
+\whf:=I_\cT\vy \, (\whf(t_i)=y_i)
+\end{align*}\end{gather*}
+
+\Com Now we the freedom to choose the points.
+
+\sep
+
+\Thm[$L^\infty$ Polynomial Best Approximation Estimate]
+
+If $f\in C^r([-1,1])$ ($r$ times continuously differentiable), $r\in\N$, then,
+for any polynomial of degree $n\mcb{\geq}r$,
+\begin{align*}
+\inf_{p\in\cP_n} \norm{f-p}_{L^\infty([-1,1])}
+&\leq
+(1+\pi^2/2)^r\frac{(n-r)!}{n!} \norm{f^{(r)}}_{L^\infty([-1,1])}\\
+&\leq C(r)n^{-r}\norm{f^{(r)}}_{L^\infty([-1,1])}.
+\end{align*}
+
+\Com So we have algebraic convergence $\BigO(n^{-r})$ if we can somehow bound
+the norm of the derivative!
+
+\sep
+
+So we'll study families of approximation schemes $\set{A_n}$ and see how
+$
+\norm{f-A_nf}
+$
+behaves as a function of $n\to\infty$.
+
+\subsection{Affine Transf. of Approx. Schemes}
+
+Let's say we have an affine linear map \[\Phi\colon [a,b]\to[c,d]\] (that maps
+intervals as with numerical quadrature), and the pullback
+\[
+\Phi^*\colon C^0([c,d])\to C^0([a,b])
+\] 
+then we can use an approximation scheme $A$ on $[a,b]$ to create an
+approximation scheme $\whA$ on $[c,d]$ as follows:
+\begin{align*}
+&A\colon C^0([a,b])\to\cP_n([a,b]), \quad f\mapsto A(\whf)
+\\
+&\whA\colon C^0([c,d])\to\cP_n([c,d]),\quad f\mapsto ((\Phi^*)^{-1}\circ
+A\circ\Phi)(f)
+\end{align*}
+
+\subsubsection{Norms under Affine Pullbacks}
+
+$
+\norm{f}_{L^\infty([c,d])}
+=\norm{\Phi^*f}_{L^\infty([a,b])}
+$
+
+$
+\norm{f-Af}_{L^\infty([c,d])}
+=\norm{\Phi^* f-\whA(\Phi^*f)}_{L^\infty([a,b])}
+$
+
+Since for the derivative of the pullback it holds that
+\[
+(\Phi^*f)(t)^{(k)}=
+f^{(k)}(\Phi(t))\cdot(\Phi'(t))^k=
+(\Phi^*f^{(k)})(t)\cdot(\Phi'(t))^k.
+\]
+we have
+\begin{align*}
+\norm{(\Phi^*f)^{(r)}}_{L^\infty([a,b])}
+&\stackrel{\text{deriv.}}{=}\norm{\left(\Phi^*f^{(r)}\right)\cdot\Phi'^r}_{L^\infty([a,b])}\\
+&\stackrel{\text{norm}}{=}\norm{\left(\Phi^*f^{(r)}\right)}_{L^\infty([a,b])}
+\cdot\norm{\Phi'}_{L^\infty([a,b])}^r\\
+&\stackrel{\text{pullb.}}{=}\norm{f^{(r)}}_{L^\infty([c,d])}
+\cdot\norm{\Phi'}_{L^\infty([a,b])}^r\\
+&=\ldots
+\end{align*}
+Note that $\Phi'$ on $[a,b]$ is a constant.
+
+\subsubsection{$L^\infty$ Poly. Best. App. Est. on Arb. Int.}
+
+\Thm[$L^\infty$ Poly. best app. est. on arb. interval]
+
+If $f\in C^r([a,b])$ ($r$ times continuously differentiable), $r\in\N$, then,
+for any polynomial of degree $n\mcb{\geq}r$,
+\begin{gather*}\begin{align*}
+\inf_{p\in\cP_n} &\norm{f-p}_{L^\infty([a,b])}
+=
+\inf_{p\in\cP_n} \norm{\Phi^*(f-p)}_{L^\infty([-1,1])}
+\\
+&=
+\inf_{p\in\cP_n} \norm{\Phi^*f-\Phi^*p)}_{L^\infty([-1,1])}
+=
+\inf_{p\in\cP_n} \norm{(\Phi^*f)-p}_{L^\infty([-1,1])}
+\\
+&\leq 
+(1+\pi^2/2)^r\frac{(n-r)!}{n!} \norm{\Phi^*f^{(r)}}_{L^\infty([-1,1])}
+\\
+&=
+C(r)
+\mcb{\left(\frac{b-a}{n}\right)^r}\norm{f^{(r)}}_{L^\infty([a,b])}.
+\end{align*}\end{gather*}
+
+\subsection{Lagrangian Approximation Schemes}
+
+\Def[Lagrangian Approximation] Is just an approximation scheme denoted by
+$L_\cT f$ for a function $f$ that (picks some nodes in some way) and then uses
+Lagrange interpolation.
+
+\Com For instance, one could use equidistant nodes.
+
+\subsubsection{Convergence of Approximation Schemes}
+
+\Def[Algebraic Convergence] 
+
+$\norm{f-A_nf}=\BigO(n^{-p})$, with rate $p>0$.
+
+\Def[Exponential convergence] 
+
+$\norm{f-A_nf}=\BigO(q^n)$, with $0<q<1$.
+
+\ssep
+
+\textbf{How to Detect the type of Convergence}
+
+\begin{itemize}
+  \item \textbf{Algebraic Convergence} $\epsilon_i\approx
+  Cn_i^{-p}$\\
+  Affine linear relationship in a \emph{log-log} scale:
+  \[\log(\epsilon_i)\approx\log(C) -p\log(n_i)\]
+  We then just apply linear regression for the data points $(\log n_i,\log
+  \epsilon_i)$ to get a lsq estimate for the rate $p$.
+  \item \textbf{Exponential Convergence} $\epsilon_i\approx
+  Ce^{-\beta n_i}$\\
+  Affine linear relationship in a \emph{lin-log} scale:
+  \[\log(\epsilon_i)\approx\log(C) -\beta n_i\]
+  We then just apply linear regression for the data points $(n_i,\log
+  \epsilon_i)$ to get a lsq estimate for the rate $q:=e^{-\beta}$.
+\end{itemize}
+
+\subsubsection{Representation of Interpolation Error}
+
+See book.
+
+\section{Numerical Quadrature}
+
+\Def[$n$-point Quadrature Formula]
+\[
+I:=\int_a^b f(t) \, dt \approx
+\sum_{j=0}^n w_j^{(n)}f(c_j^{(n)})=:Q_n(f).
+\]
+
+\Com $\Cost(Q_n) = n\cdot\Cost(f_{\text{eval}})$.
+
+\subsection{Pullback to Reference Interval}
+
+Usually $[a,b]=[-1,1]$ or $[a,b]=[0,1]$.
+
+\sep
+
+$
+\Phi\colon [a,b]  \to [c,d]
+\quad
+t \mapsto c+\frac{d-c}{b-a}\cdot (t-a)
+$
+
+$
+\Phi'\colon [a,b]  \to [c,d]
+\quad
+t \mapsto \frac{d-c}{b-a}
+$
+
+\sep
+
+$
+\Phi^{-1}\colon [c,d] \to [a,b]
+\quad
+x \mapsto a + \frac{b-a}{d-c}\cdot(x-c)
+$
+
+\sep
+
+Now the pullback transforms any functions as follows:
+
+$\Phi^*\colon C^0([c,d]) \to C^0([a,b])$. 
+So for $f(t)\in C^0([c,d])$,
+
+$(\Phi^*f)(t)=(f\circ \Phi)(t)=f(\Phi(t))\in
+C^0([a,b])$.
+
+\sep
+
+$(\Phi^*)^{-1}\colon C^0([a,b])\to C^1([c,d])$
+\quad 
+$(\Phi^*)^{-1} f = f \circ (\Phi^*)^{-1}$
+
+\sep
+
+Now this is the integral that we would like to compute on the interval $[c,d]$
+for a specific integrand $f\in C^0([c,d])$
+\[
+I=\int_c^d f(x) \, dx.
+\]
+Now we don't know any quadrtature weights and nodes for the interval $[c,d]$, so
+we pull back the integral to the interval $[a,b]$, because for any function $g$ on the
+interval $[a,b]$ we know the following quadrature formula (weights and nodes)
+that approximates the integral of any integrand $g\in C^0([a,b])$ on $[a,b]$ the
+best. So for any $g\in C^{0}([a,b])$ we know the optimal weights and nodes for
+an $n$-point quadrature formula.
+\[
+\int_a^b g(t)\,dt
+\approx \sum_{i=1}^n w_i^{(n)}f\left(c_i^{(n)}\right) = Q_n(g)
+\]
+
+So we pull back the integral to the interval $[a,b]$ and scale the result to
+obtain the original $I$. To pull the integral from $[c,d]$ to the reference
+interval $[a,b]$ we use the following substitution:
+\begin{align*}
+x&=\Phi(t) \Longleftrightarrow t=\Phi^{-1}(x)\\
+dx &= \Phi'(t)
+\end{align*}
+So this gives us
+\begin{align*}
+I&=\int_c^d f(x) \, dx
+=
+\int_{a=\Phi^{-1}(c)}^{b=\Phi^{-1}(d)}f(\Phi(t))\cdot \Phi'(t)\,dt
+\\
+&=
+\overbrace{\tfrac{d-c}{b-a}}^{=\Phi'(t)}\cdot
+\int_{a}^{b}\overbrace{f(\Phi(t))}^{\mathclap{\qquad=g(t)=(\Phi^*f)(t)}}\,dt
+\\
+\shortintertext{Now we have a function $g(t)=(\Phi^*f)(t)=f(\Phi(t))$ that we
+integrate over the reference interval $[a,b]$, so we can use the quadrature
+weights and nodes to determine the integral.}
+&\approx \tfrac{d-c}{b-a}
+\sum_{i=1}^n w_i^{(n)}g\left(c_i^{(n)}\right)
+=\tfrac{d-c}{b-a}Q_n(g)
+\\
+\shortintertext{Or we can write the quadrature formula in terms of $f$ with
+other weights and nodes} 
+&= \tfrac{d-c}{b-a}
+\sum_{i=1}^n w_i^{(n)}f\left(\Phi\left(c_i^{(n)}\right)\right)
+\\
+&=\sum_{i=1}^n \widehat{w}_i^{(n)}f\left(\widehat{c}_i^{(n)}\right)
+=\widehat{Q}_n(f).
+\quad
+{\renewcommand\arraystretch{1.5}
+\begin{matrix*}[l]
+\widehat{w}_i^{(n)}=\Phi'\cdot w_i^{(n)}=\frac{d-c}{b-a}w_i^{(n)}
+\\
+\widehat{c}_i^{(n)}=\Phi\left(c_i^{(n)}\right)
+\end{matrix*}
+}
+\end{align*}
+where $\widehat{Q}_n$ is a quadrature formula on the interval $[c,d]$ for any
+function (here we use $f$).
+
+\sep
+
+\section{Iterative Methods}
+
+\Def[Newton's Method]
+
+$F\colon\R^n\to\R^n$
+
+$\wtF\colon\R^n\to\R^n$ (affine approx of $F$ at $\vx^{(k)}$)
+\[
+\vx\mapsto F(\vx) + DF(\vx^{(k)})(\vx-\vx^{(k)})
+\]
+The objective is to pick the next $\vx^{(k+1)}$ as the zero of $\wtF$.
+\[
+\vx^{(k+1)}:=\Phi(\vx^{(k)}=\vx^{(k)}
+\overbrace{-DF(\vx^{(k)})^{-1}F(\vx^{(k)})}^{\text{Newton Correction}}.
+\]
+where $\Phi$ is the SSM function and $DF$ is usually a jacobian matrix evaluated
+at $\vx^{(k)}$.
+
+\section{Numerical Integration}
+
+\Def[First-Order ODE] $\dot{\vy}(t)=\vf(t,\vy(t))$
+
+\Def[Autonomous ODE] $\dot{\vy}(t)=\vf(\vy(t))$
+
+\Def[IVP] $\dot{\vy}(t)=\vf(t,\vy(t))$, $\vy(t_0)=\vy_0$
+
+\Def[Autonomous IVP] $\dot{\vy}(t)=\vf(\vy(t))$, $\vy(0)=\vy_0$
+
+\sep
+
+\Thm[Time-Invariance of Autonomous ODEs]
+
+If $t\mapsto\vy(t)$ is a solution of an anutonomous ODE, then for any
+$\tau\in\R$, the shifted function $t\mapsto\vy(t-\tau)$ is also a solution. Thus
+we can always make the canonical choice $t_0=0$.
+
+\subsection{Conversion Techniques}
+
+\subsubsection{Autonomization}
+
+We convert $\dot{\vy}(t)=\vf(t,\vy(t))\in\R^d$ into an autonomous ODE of the
+form $\dot{\vz}(t)=\vf(\vz(t))$ by defining
+\[
+\vz(t):=\begin{bmatrix}
+\svertbar\\
+\vy(t)\\
+\svertbar\\
+t
+\end{bmatrix}
+=\begin{bmatrix}
+\svertbar\\
+\vtz(t)\\
+\svertbar\\
+z_{d+1}
+\end{bmatrix}\in\R^{d+1}
+\]
+So, since $\frac{d}{dt}t=1$, we get the autonomous ODE
+\[
+\dot{\vz}(t)=\begin{bmatrix}
+\svertbar\\
+\dot{\vy}(t)\\
+\svertbar\\
+1
+\end{bmatrix}
+=
+\begin{bmatrix}
+\svertbar\\
+\vf(z_{d+1} \mcp{(=t)},\,\vtz(t) \mcp{(=\vy(t))})\\
+\svertbar\\
+1
+\end{bmatrix}
+\]
+And now the first $d$ coefficients of the solution $\vz(t)$ will give us
+$\vy(t)$.
+
+\subsubsection{Higher Order to First Order}
+
+Convert the ODE
+$\vy^{(n)}=f(t,\vy(t),\dot{\vy}(t),\ldots,\vy^{(n-1)(t)})\in\R^d$ as follows:
+\[
+\vz(t) :=
+\begin{bmatrix}
+t\\
+%%\svertbar\\
+\vy(t)\\
+%%\svertbar\\
+%\svertbar\\
+\vy^{(1)}(t)\\
+%\svertbar\\
+\vdots\\
+%\svertbar\\
+\vy^{(n-1)}(t)\\
+%\svertbar\\
+\end{bmatrix}
+=
+\begin{bmatrix}
+z_0\\
+%\svertbar\\
+\vz_1(t)\\
+%\svertbar\\
+%\svertbar\\
+\vz_2(t)\\
+%\svertbar\\
+\vdots\\
+%\svertbar\\
+\vz_{n}(t)\\
+%\svertbar\\
+\end{bmatrix}
+\in\R^{nd}
+\]
+Then the derivative of $\vz(t)$ is
+\[
+\dot{\vz}(t)
+=
+\vg(\vz(t))
+=
+\begin{bmatrix}
+1\\
+%\svertbar\\
+\vz_2(t)\\
+%\svertbar\\
+\vdots\\
+%\svertbar\\
+\vz_n(t)\\
+%\svertbar\\
+%\svertbar\\
+\vf(z_0,\vz_1(t),\ldots,\vz_n(t))\\
+%\svertbar\\
+\end{bmatrix}.
+\]
+And the solution is given by the $d$ rows after the first row of $\vz$. Note
+that for an IVP the initial values for
+$\vy(t_0),\dot{\vy}(t),\ldots,\vy^{(n-1)}(t)$ have to be specified.
+
+\subsection{Evolution Operators}
+
+\Def[Evolution Operator]
+
+The evolution operator for an autonomous ODE $\dot{\vy}(t)=\vf(\vy(t))$ is a
+mapping of points in state space $D\subset\R^d$:
+\begin{align*}
+\MPhi^t\colon D &\to D\\
+\vy_0 &\mapsto \vy(t)
+\end{align*}
+where $t\mapsto\vy(t)$ is the solution of the IVP. 
+We may also let $t$ vary, which spawns a \emph{family} of mappings
+$\set{\MPhi^t}$ of the state space onto itself. However, it can also be viewed
+as a mapping with two arguments, a duration $t$ and an initial state value
+$\vy_0$.
+\begin{align*}
+\MPhi\colon \R\times D & \to D\\
+(t,\vy_0) &\mapsto \MPhi^t\vy_0:=\vy(t)
+\end{align*}
+where $t\mapsto\vy(t)\in C^1(\R,\R^d)$ is the unique (global) solution of the
+IVP $\dot{\vy}(t)=\vf(\vy(t))$, $\vy(0)=\vy_0$.
+
+\Com Note that $t\mapsto\MPhi^t\vy_0$ describes the solution $\vy(t)$ of
+$\dot{\vy}(t)=\vf(\vy(t))$ for $\vy(0)=\vy_0$ (a trajectory). Therefore, by
+virtue of definition, we have
+\[
+\frac{\partial\MPhi(t,\vy)}{\partial
+t}=\frac{d\vy(t)}{dt}=\dot{\vy}(t)=\vf(\vy(t))=\vf(\MPhi^t\vy).
+\]
+
+\subsection{Polygonal Approximation of ODEs}
+
+\subsubsection{Objectives}
+\begin{itemize}
+  \item Given $(t_0,\vy_0)$ approximate $\vy(T)$ at final time $T$.
+  \item Approximate the trajectory $t\mapsto\vy(t)$ for an IVP.
+\end{itemize}
+
+\subsubsection{Temporal Meshes}
+\Def[Temporal Mesh]
+
+$\cM:=\set{t_0<t_1<t_2<\cdots<t_{N-1}<t_N:=T}\subset[t_0,T]$
+
+\Com In this lecture we treat examples where we assume that the interval of
+interest is contained in the solution of the IVP.
+
+\subsubsection{Explicit Euler Method}
+For $t\in[t_k,t_{k+1}]$ we assume (fwd. diff. quot.)
+\[
+\dot{\vy}(t) \approx
+\frac{\vy_{k+1}-\vy_k}{t_{k+1}-t_k} = \vf(t_{\mcb{k}},\vy_{\mcb{k}})
+\approx
+\vf(t_k,\vy(t_k))
+\]
+Which gives the recursion
+\[
+\vy_{k+1}=\vy_{k}+h_k\vf(t_k,\vy_k), \qquad
+k=0,\ldots,N-1
+\]
+
+\subsubsection{Implicit Euler Method}
+For $t\in[t_k,t_{k+1}]$ we assume (bw. diff. quot.)
+\[
+\dot{\vy}(t) \approx
+\frac{\vy_{k+1}-\vy_k}{t_{k+1}-t_k} = \vf(t_{\mcb{k+1}},\vy_{\mcb{k+1}})
+\approx
+\vf(t_{k+1},\vy(t_{k+1}))
+\]
+Which gives the equation
+\[
+\vy_{k+1}=\vy_{k}+h_k\vf(t_{k+1},\vy_{k+1}), \qquad
+k=0,\ldots,N-1
+\]
+
+\Com May involve solving a LSE for $\vy_{k+1}$.
+
+\subsubsection{Implicit Midpoint Method}
+Using the symmetric difference quotient:
+
+$
+\dot{\vy}(t)\approx
+\frac{\vy(t+h)-\vy(t-h)}{2h}
+$
+
+and the approx. lin. of $\vy$ around $t$ we get for $t\in[t_k,t_{k+1}]$
+\begin{gather*}
+\begin{align*}
+\dot{\vy}(t)\approx
+\frac{\vy_{k+1}-\vy_{k}}{h_k}
+=
+\vf\left(
+\tfrac{1}{2}(t_{k}+t_{k+1}),
+\tfrac{1}{2}(\vy_k+\vy_{k+1})
+\right)
+\approx
+\vf\left(
+\tfrac{1}{2}(t_{k}+t_{k+1}),
+\vy\left(\tfrac{1}{2}(t_{k}+t_{k+1})\right)
+\right)
+\end{align*}
+\end{gather*}
+Which gives the equation for $k=0,\ldots,N-1$
+\[
+\vy_{k+1}
+=
+\vy_{k}+h_k
+\vf\left(
+\tfrac{1}{2}(t_{k}+t_{k+1}),
+\tfrac{1}{2}(\vy_k+\vy_{k+1})
+\right)
+\]
+
+
+\subsubsection{Euler Polygon from Approximations}
+
+Given the Approximation $\vy_0,\ldots,\vy_N$ we can create the approximating
+Euler Polygon for $\Phi^t$ as follows:
+\begin{gather*}
+\begin{align*}
+\vy_h\colon[t_0,t_N]&\to\R^d
+\\
+t &\mapsto
+\vy_k\frac{t_{k+1}-t}{t_{k+1}-t_k}
++\vy_{k+1}\frac{t-t_{k}}{t_{k+1}-t_k}
+\quad
+\text{for }t\in[t_k,t_{k+1}].
+\end{align*}
+\end{gather*}
+
+\subsection{General Single-Step Methods}
+
+\Def[Discrete Evolution] The methods above describe how to obtain $\vy_{k+1}$
+from $\vy_{k}$ - so in some sense, for a timestep $h$, they describe a mapping
+$\MPsi$ that approximates the Evolution operator $\MPhi$ discretely, so
+$\MPsi(h,\vy)\approx\Phi^h\vy$. That's why we call it discrete evolution.
+
+\subsection{Convergence of SSMs}
+
+\Def[Discretization Error] $\epsilon_N:=\norm{\vy(T)-\vy_N}$.
+
+\ssep
+
+We study the \emph{asymptotic} error for mostly equidistant meshes
+$\cM_N:=\dset{t_k:=\frac{k}{N}T}{k=0,\ldots,N}$ in terms of $h\to 0$. Usually
+the error converges algebraically in terms of the stepsize, so
+$\epsilon_N\in\BigO(h^{p})$, where $p$ is called the \emph{order} of the method.
+If we know the exact value, and we want to estimate the rate, we can do this as
+follows in each approximation step:
+\[
+p\approx\log_2\left(
+\frac{
+\epsilon_{\text{old}}
+}{
+\epsilon_{\text{new}}
+}\right)
+\]
+
+\subsection{Explicit Range Kutta Methods}
+
+\textbf{Basic Idea:}
+
+Let's say we have an IVP $\dot{\vy}(t)=\vf(t,\vy(t))$, 
+$\vy(0)=\vy_0$. Then we know by the fundamental theorem of calculus:
+\[
+\vy(t_{k+1})=\vy(t_k)+\overbrace{\int_{t_k}^{t_{k+1}} \vf(\tau,\vy(\tau))\,
+d\tau}^{\mathclap{\text{Fund. Thm.: }\vy(t_{k+1})-\vy(t_{k})}}.
+\]
+
+\sep
+
+\Def[Explicit Runge-Kutta Method]
+
+For $b_i,a_{ij}\in\R$, $c_i:=\sum_{j=1}^{i-1}a_{ij}$, $i,j=1,\ldots,s$,
+$s\in\N$, an $s$-\emph{stage explicit Runge-Kutta single step method} (RK-SSM)
+for the ODE $\dot{\vy}(t)=\vf(t,\vy(t))$, $\vf\colon\Omega\to\R^d$, is defined
+by $(\vy_0\in D)$
+\[
+\vk_i:=\vf\left(t_0+hc_i,\vy_0+h\sum_{j=1}^{i-1}a_{ij}\vk_j\right),
+\quad
+i=1,\ldots,s,
+\]
+\[
+\vy_{k+1}:=\vy_k+h\sum_{i=1}^sb_i\vk_i.
+\]
+The vectors $\vk_i\in\R^d$, $i=1,\ldots,s$, are called \emph{increments}, $h>0$
+is the size of the timestep.
+
+\ssep
+\begin{Code}
+for every time interval from $\ell=1$ to $N$
+	compute the interval width $h$ (may be uniform)
+	initialize $\MK$ to contain the $s$ $\vk_i$s
+	for $i=1$ to $s$
+		compute the $\vk_i$
+	then compute the next evolution step through
+	the quadrature rule:
+	$\vy_\ell:=\vy_{\ell}+h\sum_{i=1}^sb_i\vk_i$
+\end{Code}
+
+\ssep
+
+\Cor[Consistent RK-SSMs]
+
+A $s$-step RK-SSM is \emph{consistent} with the ODE
+$\dot{\vy}(t)=\vf(t,\vy(t))$, if and only if,
+$
+\sum_{i=1}^s b_i=1.
+$
+
+\ssep
+
+\textbf{Create Higher Order SSMs through Bootstr.}
+
+\textbf{Goal:} Convergence of $\BigO(h^{p+1})$
+
+\textbf{Given:} Method with convergence of $\BigO(h^p)$
+
+\textbf{In short:} Since in the quadrature we multiply by $h$, if we use the
+other method to approximate the evaluations of the quadrature, we'll get a
+method of $\BigO(h^{p+1})$.
+
+\ssep
+
+\textbf{Butcher Scheme Notation for Explicit RK-SSM}
+
+\[
+\begin{bmatrix}
+\begin{array}{c|c}
+\vc & \MU\\
+\hline
+ & \vb^\T
+\end{array}
+\end{bmatrix}
+=
+\left[
+\begin{array}{c|cccc}
+c_1 & 0 &\cdots & \cdots & 0\\
+c_2 & a_{21} & \ddots & & \vdots\\
+\vdots & \vdots & \ddots & \ddots & \vdots\\
+c_s & a_{s1} & \cdots & a_{s,s-1} & 0\\
+\hline
+& b_1 & \cdots & b_{s-1} & b_s
+\end{array}
+\right]
+\in
+\R^{(s+1)\times (s+1)}
+\]
+
+\subsection{Why High Order Met. is Desirable}
+
+Let's assume that we know the order of one method
+\[
+err(h_{\text{old}})\approx Ch^p
+\]
+for a meshwidth $h_\text{old}$. Now we want to reduce the mesh-width, such that
+we get an asymptotic error reduction of
+\[
+\frac{err(h_{\text{new}})}{err(h_{\text{old}})}\mbeq \frac{1}{\rho}
+\quad
+\text{for reduction factor }\rho>1.
+\]
+Then we have
+\[
+\frac{err(h_{\text{new}})}{err(h_{\text{old}})}
+=
+\frac{
+C\cdot h_{\text{new}}^p
+}{
+C\cdot h_{\text{old}}^p
+}
+=
+\left(\frac{
+h_{\text{new}}
+}{
+h_{\text{old}}
+}\right)^p
+\mbeq \frac{1}{\rho}
+\quad
+\]
+\[
+\Longleftrightarrow
+\quad
+h_{\text{new}}:
+=\rho^{-\frac{1}{p}}h_{\text{old}}=\frac{1}{\sqrt[p]{\rho}}h_{\text{old}}
+\]
+Now this tells us that if we want to decrease the error by a factor of $\rho$,
+we have to decrease $h_{\text{new}}$ as above. Now, the larger the order $p$,
+the less we have to reduce $h_{\text{new}}$ to get a prescribed (relative)
+reduction of the error!
+
+\section{SSMs for Stiff IVPs}
+
+\subsection{Stability of $\dot{y}=\lambda y$ for Expl. RK}
+
+\Thm[Stability Function of Explicit RK-Methods]
+
+For a Butcher scheme
+\[
+\left[
+\begin{array}{c|c}
+\vc & \MU\\
+\hline
+&\vb^\T
+\end{array}
+\right]
+\]
+the recursions for $k_i$ and $y_{k+1}$ gives us the following system
+\begin{align*}
+\begin{bmatrix}
+\MI-z\MU & \vo\\
+-z\vb^\T & 1
+\end{bmatrix}
+\begin{bmatrix}
+\vk\\ y_{k+1}
+\end{bmatrix}
+=y_k
+\begin{bmatrix}
+\vec{1}\\
+1
+\end{bmatrix}
+\qquad
+\begin{matrix}
+\vk=(k_1,\ldots,k_s)^\T/\lambda\\
+z=\lambda h\\
+\vec{1}=(1,\ldots,1)^\T
+\end{matrix}
+\end{align*}
+Which gives us
+
+$
+y_{k+1}=\underbrace{(1+z\vb^\T(\MI-z\MU)^{-1}\vec{1})}_{=S(z)=S(\lambda h)}y_0
+$.
+
+The discrete evolution $\MPsi^h$ of an explicit $s$-stage RK SSM with the upper
+Butcher scheme for the ODE $\dot{y}(t)=\lambda y$ amounts to a multiplication
+with the number
+\[
+y_{k+1}=\MPsi^h_\lambda=S(\lambda h)y_k
+\]
+where $S$ is the \emph{stability function}
+\[
+S(z) := \underbrace{1 + z\vb^\T(\MI-z\MU)^{-1}\vec{1}}_{\text{solving LSE w.
+block elim.}} =
+\underbrace{\det\left(\MI-z\MU+z\vec{1}\vb^\T\right)}_{\text{solving LSE w.
+Cram. Rule}}
+\]
+
+with $z=\lambda h$. So we have $y_k=S(z)^{k}y_0$.
+\begin{itemize}
+  \item $\abs{S(\lambda h)}>1\Longrightarrow\text{blow-up}$
+  \item $\abs{S(\lambda h)}\leq 1\Longrightarrow\text{stable approx.}$
+\end{itemize}
+for general RK-methods.
+
+The trick is to pick $h$ sufficiently small if $\lambda$ is big! So, we're
+
+\Cor A stability function $S(z)$ for a consistent $s$-step explicit RK-method
+is a non-constant polynomial in $z$ of degree $\leq s$, $S(z)\in\cP_s$.
+
+\textbf{Stability Function for Specific RK-Methods}
+
+\begin{itemize}
+	\item Explicit Euler: $S(z)=1+z$
+	\item Explicit Trapezoidal Method: $S(z)=1+z+\frac{1}{2}z^2$
+	\item RK4 Method: $S(z)=1+z+\frac{1}{2}z^2+\frac{1}{6}z^3+\frac{1}{24}z^4$
+\end{itemize}
+
+\sep
+
+\textbf{Sidenote on Blow-Ups}
+
+We know that for a linear ODE $\dot{y}=\lambda y$ the solution is $y(t)=c\cdot
+e^{\lambda t}$. Now if we say that $\lambda\in\C$, $\lambda=a+bi$, then we have
+the following:
+\[
+\norm{ce^{\lambda t}} 
+= \norm{c}\norm{e{\lambda t}}
+=\norm{c}\norm{e^{(a+bi)t}}
+=\underbrace{\norm{c}\norm{e^{at}}}_{=r}\underbrace{\norm{e^{i\overbrace{bt}^{=\varphi}}}}_{=1}
+=\norm{c}\norm{e^{\Re(\lambda)t}}
+\]
+Thus, for
+\begin{itemize}
+  \item $\Re(\lambda)=a < 0$, we have an exponential decay in our fuction
+  $y(t)$ (decay equation), so $\lambda_k\to 0$ for $k\to\infty$ (we have a
+  exponential decrease). \tcr{So we have take care that the numerical solution
+  does not blow up, because the exact solution doesn't}. That's when we have to
+  make sure we use a small timestep $h$. Note that the blow-up happens due to
+  the nature of the discrete evolution obtained through the $S$ function - we're
+  exponentiating it.
+  \item $\Re(\lambda)=a >0$, we have an exponential blow-up in the function
+  $y(t)$ (growth equation), so the exact solution $\lambda_k\to\infty$ for
+  $k\to\infty$ (has a blow-up). So we don't need to worry about a blow-up of the
+  numerical solution (because the exact does too) - this is actually desirable.
+\end{itemize}
+
+\subsection{Systems of Linear ODEs: $\dot{\vy}=\MM\vy$}
+
+Let's say we have the following ODE (or IVP)
+\[
+\dot{\vy}=\MM\vy,\qquad\MM\in\R^{d\times d}, \qquad
+\vy(0)=\vy_0
+\]
+Then we can diagonalize $\MM$ as follows:
+\[
+\MM=\MV\MD\MV^{-1},
+\]
+\[
+\MV,\MD\in\C^{d\times d},
+\quad
+\MV \text{ regular},\quad
+\MD =\diag(\lambda_1,\ldots,\lambda_d).
+\]
+Then write the ODE as $d$ decoupled scalar linear ODEs
+\begin{gather*}
+\begin{align*}
+\dot{\vy}=\MV\MD\MV^{-1}\vy
+\,
+\Longleftrightarrow
+\,
+\underbrace{\MV^{-1}\dot{\vy}}_{\dot{\vz}}=\MD\underbrace{\MV^{-1}\dot{\vy}}_{\vz}
+\,
+\Longleftrightarrow
+\,\dot{\vz}=\MD\vz
+\,
+\Longleftrightarrow
+\,
+\begin{matrix}
+\dot{z}_1 = \lambda_1 z_1\\
+\vdots\\
+\dot{z}_d = \lambda_d z_d
+\end{matrix}
+\end{align*}
+\end{gather*}
+And the solution $\vz$ is
+\begin{gather*}
+\begin{align*}
+\vz(t)=\begin{bmatrix}
+c_1e^{\lambda_1 t}\\
+\vdots\\
+c_de^{\lambda_d t}
+\end{bmatrix}
+=
+\diag(e^{\lambda_1t},\ldots,e^{\lambda_dt})\vc
+\quad
+\begin{matrix}
+\text{for some const. }\\
+\vc=(c_1,\ldots,c_d)^\T
+\end{matrix}
+\end{align*}
+\end{gather*}
+
+And we know that
+$
+\vy(t) = \MV\diag(e^{\lambda_1t},\ldots,e^{\lambda_dt})\vc
+$. So according to the IVP the equation has to satisfy
+\[
+\vy(0)=\vy_0 =\MV\diag(1,\ldots,1)\vc=\MV\MI\vc
+\,\Longrightarrow\,
+\vc=\MV^{-1}\vy_0
+\]
+Final solution for IVP $
+\vy(t) = \MV\diag(e^{\lambda_1t},\ldots,e^{\lambda_dt})\MV^{-1}\vy_0
+$.
+
+\sep
+
+\textbf{Solve it with General RK-Method}
+
+So, we have the ODE:
+$
+\dot{\vy}=\MM\vy=\MV\MD\MV^{-1}\vy
+$.
+
+Now the idea is to transform it as follows with
+\[
+\vz_k=\MV^{-1}\vy_k, \qquad
+\vhk_i=\MV^{-1}\vk_i.
+\]
+So we get the following recursion equations
+\[
+\vhk_i=\MD\left(\vz_0+h\sum_{j=1}^{i-1}a_{ij}\vhk_j\right),
+\qquad
+\vz_{i+1} = \vz_i+h\sum_{i=1}^s b_i\vhk_i
+\]
+So now again with the diagonalization we end up with decoupled scalar ODEs
+\[
+\dot{\vz}_\ell = \lambda_\ell\vz_\ell,\qquad \ell=1,\ldots,d.
+\]
+Now using the RK-method we get the discrete evolution which is diagonalized
+too:
+\[
+\vy_{k+1}=\MPsi^h\vy_k,
+\qquad
+(\vz_{k+1})_\ell=\MPsi^h_\ell(\vz_k)_\ell 
+\]
+Now in order to avoid the blow-up of the $\vy_k$s we can also look at the
+sequences produced in the $(\vz_k)_\ell$ scalar problems. So we have to look at
+the specific $S(z)$, $z=\lambda h$ for the scalar equation.
+
+\sep
+
+\textbf{Solving it with Explicit Euler Method}
+
+Now if we were using the explicit Euler method, the update step would be:
+\[
+\vy_{k+1} = \vy_k + h\MM\vy_k
+\]
+Now, since we have the diagonalization of $\MM$, the update step is:
+\[
+\vy_{k+1} = \vy_k + \MV\MD\MV^{-1}\vy_k
+\]
+And, if we again use $\vz_{k+1}=\MV^{-1}\vy_{k+1}$, then we can do the update
+step much simpler:
+\[
+\vz_{k+1} = \vz_k + h\MD \vz_k = (\MI+h\MD)\vz_k
+\]
+\[
+\quad\Longleftrightarrow\quad
+\begin{matrix}
+(\vz_{k+1})_1 = (1 + h\lambda_1)(\vz_k)_1\\
+\vdots\\
+(\vz_{k+1})_d = (1 + h\lambda_d)(\vz_k)_d\\
+\end{matrix}
+\]
+So we have an explicit euler recursion step as with linear ODEs. Now the big
+advantage is that these ODEs $(\dot{\vz})_i=\lambda(\vz)_i$ are decoupled so we
+know that there is a blow-up if:
+\[
+\text{blow-up of }(\vy_k)
+\quad
+\Longleftrightarrow
+\quad
+\exists i\in\set{1,\ldots,d}\colon
+S(h\lambda_i)>1
+\]
+\[
+\Longleftrightarrow
+\quad
+\exists i\in\set{1,\ldots,d}\colon
+\abs{1+h\lambda_i}>1
+\]
+So we have the following time-step constraint for $h$:
+\[
+\forall i\in\set{1,\ldots,d}\colon\quad
+h<\frac{2}{\abs{\lambda_i}}.
+\]
+So we have to pick:
+\[
+h<\frac{2}{\max_{i\in\set{1,\ldots,d}}\abs{\lambda_i}}.
+\]
+Now if there is one eigenvalue with positive real part, then the exact solution
+
+
+\sep
+
+\Thm[(Abs.) Stab. of Exp. RK-. for LS of ODEs]
+
+The sequence $(\vy_k)_k$ of approximation generated by an explicit RK-SSM with
+stability function $S$ applied to the linear autonomous ODE $\dot{\vy}=\MM\vy$,
+$M\in\C^{d\times d}$ with uniform timestep $h>0$ \emph{decays exponentially} for
+every initial state $\vy_0\in\C^d$, if and only if $\abs{S(\lambda_ih)}<1$ for
+all eigenvalues $\lambda_i$ of $\MM$.
+
+\sep
+
+Now recall, even if $\MM\in\R^{d\times d}$, the eigenvalues $\lambda_i\in\C$ of
+the diagonalization can be complex. Recall that $z_k=S(\lambda)^ky_0$ so
+\[
+y_k\to 0 \text{ for }k\to\infty
+\quad
+\Longleftrightarrow
+\quad
+\abs{S(\lambda h)}<1.
+\]
+Hence the modulus $\abs{S(\lambda h)}$ tells us for which combinations of
+$\lambda$ and stepsize $h$ we achieve exponential decay $y_k\to 0$ for
+$k\to\infty$, which is the desirable behavior of the approximations for
+$\Re\lambda<0$.
+
+\ssep
+
+\Def[Region of (Absolute) Stability]
+
+Let the discrete evolution $Psi$ for a SSM applied to the scalar linear ODE
+$\dot{y}=\lambda y$, $y\in\C$, be of the form
+\[
+\Psi^h y=S(z)y,\quad y\in\C, h>0 \text{ with }z:=h\lambda
+\]
+and a function $S\colon \C\to\C$. Then the \emph{region of (absolute) stability
+of the single step method is given by}
+\[
+S_{\Psi}:=\dset{z\in\C}{\abs{S(z)}<1}\subset\C.
+\]
+
+\Com So, an explicit RK-SSM will generate exponentially decaying solution sfor
+the linear ODE $\dot{\vy}=\MM\vy$, $\MM\in\C^{d\times d}$, for every initial
+state $\vy\in\C^d$, if an donly if $\lambda_i h\in S_{\Psi}$ for all eigenvalues
+$\lambda_i$ of $\MM$. 
+
+\Com So the region of stability is always a bounded region in the complex plane.
+
+\subsection{Stiff IVPs}
+
+Now let's consider the case where we have non-linear ODEs. So, let
+\[
+\dot{\vy}=\vf(\vy)
+\]
+be a non-linear ODE with initial value $\vy_0$.
+
+Now let $0<t\ll 1$, then $\vy(t)\approx\vy(0)=\vy_0$ approximately. So we can
+linearize $\vy$ around $\vy_0$.
+\[
+\dot{\vy}\approx \vf(\vy_0) + D\vf(\vy_0)(\vy-\vy_0).
+\qquad
+\text{(Linearization)}
+\]
+Now if we replace $\approx$ by $=$ then we get an \emph{(affine)} linear ODE. So
+we replace the Jacobian by a matrix $\MM:=D\vf(\vy_0)$, and so we get a linear
+ODE with some constant term
+\[
+\dot{\vy}=\MM\vy \overbrace{-\MM\vy_0 + \vf(\vy_0)}^{+\vb \text{ (const)}}
+=\MM\vy+\vb
+\]
+So for small times $t\mapsto \vy(t)$ behaves like the solution of an affine
+linear ODE.
+
+Now it turns out that this linearization can also be done for RK-methods.
+
+
+\end{multicols*}
+\end{document}

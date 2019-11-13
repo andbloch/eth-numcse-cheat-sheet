@@ -1,6 +1,6 @@
 # eth-numcse-cheat-sheet
 
-Exam cheat sheet for the "Numerical Methods for Computational Scienece and Engineering (CSE)" course taught by Prof. Dr. Ralf Hiptmair at ETH Zürich in fall 2016.
+Exam cheat sheet for the "Numerical Methods for Computational Science and Engineering (CSE)" course taught by Prof. Dr. Ralf Hiptmair at ETH Zürich in fall 2016.
 
 **Disclaimer:** Please be advised that nothing found here is guaranteed to be complete or correct.
 
